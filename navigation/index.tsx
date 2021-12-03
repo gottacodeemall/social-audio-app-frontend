@@ -20,6 +20,8 @@ import TabTwoScreen from '../screens/TabTwoScreen';
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
 import AudioRecorder from '../components/audioRecorder/AudioRecorder';
+import Login from '../screens/Login';
+import Signup from '../screens/Signup';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -36,7 +38,7 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
  * A root stack navigator is often used for displaying modals on top of all other content.
  * https://reactnavigation.org/docs/modal
  */
-const Stack = createNativeStackNavigator<RootStackParamList>();
+const Stack = createNativeStackNavigator();
 
 function RootNavigator() {
   return (
@@ -46,6 +48,8 @@ function RootNavigator() {
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
       </Stack.Group>
+      <Stack.Screen name="Signup" component={Signup} />
+      <Stack.Screen name="Login" component={Login} />
     </Stack.Navigator>
   );
 }
@@ -107,7 +111,7 @@ function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="Discussion"
-        component={TabTwoScreen}
+        component={Signup}
         options={{
           title: 'Discussions',
           tabBarIcon: ({ color }) => <Octicons name="comment-discussion" size={24} color={color} />,
@@ -115,7 +119,7 @@ function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="Profile"
-        component={TabTwoScreen}
+        component={Login}
         options={{
           title: 'Profile',
           tabBarIcon: ({ color }) => <AntDesign name="user" size={24} color={color} />,
