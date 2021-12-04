@@ -4,3 +4,15 @@ export type User = {
   avatar: string;
   email: string;
 };
+
+export interface HomePageCategoryQuestions {
+  homePageCategory: string;
+  questions: Question[];
+}
+
+export interface Question {
+  questionId: string;
+  caption: string;
+  postedBy: string;
+  thumbnailUrl: string;
+}

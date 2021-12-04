@@ -1,5 +1,5 @@
 import { QueryParams } from 'expo-linking';
-import { User, ApiResponse } from './contracts';
+import { User } from './contracts';
 import { http } from './http';
 
 const baseURL = 'https://74pataqajg.execute-api.us-east-1.amazonaws.com/test';
@@ -9,8 +9,8 @@ export const fetchUsers = async (): Promise<User[]> => {
   return data;
 };
 
-export const login = async (email,password) => {
-  const queryUrl = '/login?email='+email+'&'+'password='+password
+export const login = async (email, password) => {
+  const queryUrl = '/login?email=' + email + '&' + 'password=' + password;
   // console.log(baseURL + queryUrl);
   // const { data } = await http.get(queryUrl);
   const response = await fetch(baseURL + queryUrl);
@@ -20,15 +20,25 @@ export const login = async (email,password) => {
   return json;
 };
 
-export const signup = async (email,password,firstName,lastName,age,gender,ethnicity,intro,phoneNumber) => {
-  const queryUrl = '/signup'
+export const signup = async (
+  email,
+  password,
+  firstName,
+  lastName,
+  age,
+  gender,
+  ethnicity,
+  intro,
+  phoneNumber
+) => {
+  const queryUrl = '/signup';
   // console.log(baseURL + queryUrl);
   // const { data } = await http.get(queryUrl);
   const response = await fetch(baseURL + queryUrl, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({
       email: email,
@@ -39,9 +49,21 @@ export const signup = async (email,password,firstName,lastName,age,gender,ethnic
       sex: gender,
       ethnicity: ethnicity,
       intro: intro,
-      phoneNumber: phoneNumber
-    })
+      phoneNumber: phoneNumber,
+    }),
   });
+  // console.log((await response.json()));
+  const json = await response.json();
+  // console.log(json)
+  return json;
+};
+
+export const fetchQuestions = async () => {
+  const queryUrl = '/dashboard/relevantquestionsforhomepage';
+  // console.log(baseURL + queryUrl);
+  // const { data } = await http.get(queryUrl);
+  const response = await fetch(baseURL + queryUrl);
+
   // console.log((await response.json()));
   const json = await response.json();
   // console.log(json)
