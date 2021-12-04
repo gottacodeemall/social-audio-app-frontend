@@ -28,10 +28,11 @@ import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../typ
 import LinkingConfiguration from './LinkingConfiguration';
 import AudioRecorder from '../components/audioRecorder/AudioRecorder';
 import Dashboard from '../screens/Dashboard';
-import Question from '../screens/Question';
 import Login from '../screens/Login';
 import Signup from '../screens/Signup';
 const val = 0;
+import QuestionScreen from '../screens/QuestionScreen';
+import { useSelector } from 'react-redux';
 
 const styles = StyleSheet.create({
   container: {
@@ -69,13 +70,14 @@ export default function Navigation(
   { colorScheme }: { colorScheme: ColorSchemeName },
   { navigation }
 ) {
+  const loggedInUser = useSelector((state) => state.generic.loggedInUser);
   return (
     <NavigationContainer
       linking={LinkingConfiguration}
       theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
     >
       {/* const loggedInUser = useSelector(state => ) */}
-      {val == 1 ? (
+      {loggedInUser != '' ? (
         <RootNavigator />
       ) : (
         <>
@@ -110,7 +112,7 @@ function RootNavigator() {
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
       </Stack.Group>
-      <Stack.Screen name="Question" component={Question} />
+      <Stack.Screen name="Question" component={QuestionScreen} />
       <Stack.Screen name="Signup" component={Signup} />
       <Stack.Screen name="Login" component={Login} />
     </Stack.Navigator>
