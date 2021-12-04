@@ -14,5 +14,17 @@ export interface Question {
   questionId: string;
   caption: string;
   postedBy: string;
-  thumbnailUrl: string;
+  Thumbnail: string;
+  hashtags: string;
+  categories: string;
+  taggedUsers: string;
+  audio: string;
+  location: string;
+  isPublished: boolean;
+  questionStatus: string;
+}
+
+export interface ApiResponse {
+  success: boolean;
+  error: string;
 }

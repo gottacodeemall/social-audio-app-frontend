@@ -21,9 +21,9 @@ import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../typ
 import LinkingConfiguration from './LinkingConfiguration';
 import AudioRecorder from '../components/audioRecorder/AudioRecorder';
 import Dashboard from '../screens/Dashboard';
-import Question from '../screens/Question';
 import Login from '../screens/Login';
 import Signup from '../screens/Signup';
+import QuestionScreen from '../screens/QuestionScreen';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -50,7 +50,7 @@ function RootNavigator() {
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
       </Stack.Group>
-      <Stack.Screen name="Question" component={Question} />
+      <Stack.Screen name="Question" component={QuestionScreen} />
       <Stack.Screen name="Signup" component={Signup} />
       <Stack.Screen name="Login" component={Login} />
     </Stack.Navigator>
