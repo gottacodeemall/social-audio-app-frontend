@@ -1,20 +1,25 @@
 import React, { MutableRefObject, useEffect, useState } from 'react';
 import { Dimensions, Image, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
 import Slider from '@react-native-community/slider';
-import * as Icons from './Icons';
+import * as Icons from '../Icons/Icons';
 import { Audio, AVPlaybackStatus } from 'expo-av';
 import * as FileSystem from 'expo-file-system';
 import { useRef } from 'react';
-import { Feather, FontAwesome, FontAwesome5, Ionicons, SimpleLineIcons } from '@expo/vector-icons';
+import { AntDesign, Feather, FontAwesome, FontAwesome5, Ionicons } from '@expo/vector-icons';
+import { Button } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/core';
+import { useDispatch } from 'react-redux';
+import { audioUpdateRecordingURI, updateState } from '../../redux/actions';
 
 const { width: DEVICE_WIDTH, height: DEVICE_HEIGHT } = Dimensions.get('window');
 const BACKGROUND_COLOR = '#EEEEEE';
 const greyColor = '#000000';
 const LIVE_COLOR = '#FF0000';
 const DISABLED_OPACITY = 0.5;
-const RATE_SCALE = 3.0;
 
-export default function AudioRecorder() {
+export default function AudioRecorder(props: any) {
+  const navigation = useNavigation();
+  console.log('props', props);
   let recording: MutableRefObject<Audio.Recording | null> = useRef(null);
   let sound: MutableRefObject<Audio.Sound | null> = useRef(null);
   let isSeeking: MutableRefObject<boolean> = useRef(false);
@@ -37,6 +42,8 @@ export default function AudioRecorder() {
   const [shouldCorrectPitch, setShouldCorrectPitch] = useState<boolean>(false);
   const [volume, setVolume] = useState<number>(1.0);
   const [rate, setRate] = useState<number>(1.0);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setFontLoaded(true);
@@ -218,24 +225,6 @@ export default function AudioRecorder() {
     }
   };
 
-  const _trySetRate = async (rate: number, shouldCorrectPitch: boolean) => {
-    if (sound.current != null) {
-      try {
-        await sound.current.setRateAsync(rate, shouldCorrectPitch);
-      } catch (error) {
-        // Rate changing could not be performed, possibly because the client's Android API is too old.
-      }
-    }
-  };
-
-  const _onRateSliderSlidingComplete = async (value: number) => {
-    _trySetRate(value * RATE_SCALE, shouldCorrectPitch);
-  };
-
-  const _onPitchCorrectionPressed = () => {
-    _trySetRate(rate, !shouldCorrectPitch);
-  };
-
   const _onSeekSliderValueChange = (value: number) => {
     if (sound.current != null && !isSeeking.current) {
       isSeeking.current = true;
@@ -290,6 +279,26 @@ export default function AudioRecorder() {
       return `${_getMMSSFromMillis(recordingDuration)}`;
     }
     return `${_getMMSSFromMillis(0)}`;
+  };
+
+  const updateRecordingUri = (uri: string | undefined) => {
+    dispatch(updateState(audioUpdateRecordingURI, uri));
+  };
+
+  const saveAudio = () => {
+    if (recording.current) {
+      const uri = recording.current.getURI();
+      updateRecordingUri(uri ?? undefined);
+      if (props.postSaveRedirection) {
+        navigation.navigate(props.postSaveRedirection);
+      }
+    } else {
+      updateRecordingUri(undefined);
+    }
+  };
+
+  const navigateAway = () => {
+    navigation.goBack();
   };
 
   return (
@@ -355,86 +364,76 @@ export default function AudioRecorder() {
                 },
               ]}
             >
-              <View />
-              <View style={styles.playbackContainer}>
-                <Slider
-                  style={styles.playbackSlider}
-                  trackImage={Icons.TRACK_1.module}
-                  thumbImage={Icons.THUMB_1.module}
-                  value={_getSeekSliderPosition()}
-                  onValueChange={_onSeekSliderValueChange}
-                  onSlidingComplete={_onSeekSliderSlidingComplete}
-                  disabled={!isPlaybackAllowed || isLoading}
-                />
-                <Text style={[styles.playbackTimestamp]}>{_getPlaybackTimestamp()}</Text>
-              </View>
-              <View style={[styles.buttonsContainerBase, styles.buttonsContainerTopRow]}>
-                <View style={styles.volumeContainer}>
-                  <TouchableHighlight
-                    underlayColor={BACKGROUND_COLOR}
-                    style={styles.wrapper}
-                    onPress={_onMutePressed}
-                    disabled={!isPlaybackAllowed || isLoading}
-                  >
-                    {muted ? (
-                      <Ionicons name="md-volume-mute-outline" size={35} color={greyColor} />
-                    ) : (
-                      <Ionicons name="volume-high-outline" size={35} color={greyColor} />
-                    )}
-                  </TouchableHighlight>
+              <View style={styles.innerHalfScreenContainer}>
+                <View style={styles.playbackContainer}>
                   <Slider
-                    style={styles.volumeSlider}
+                    style={styles.playbackSlider}
                     trackImage={Icons.TRACK_1.module}
-                    thumbImage={Icons.THUMB_2.module}
-                    value={1}
-                    onValueChange={_onVolumeSliderValueChange}
+                    thumbImage={Icons.THUMB_1.module}
+                    value={_getSeekSliderPosition()}
+                    onValueChange={_onSeekSliderValueChange}
+                    onSlidingComplete={_onSeekSliderSlidingComplete}
                     disabled={!isPlaybackAllowed || isLoading}
                   />
+                  <Text style={[styles.playbackTimestamp]}>{_getPlaybackTimestamp()}</Text>
                 </View>
-                <View style={styles.playStopContainer}>
-                  <TouchableHighlight
-                    underlayColor={BACKGROUND_COLOR}
-                    style={styles.wrapper}
-                    onPress={_onPlayPausePressed}
-                    disabled={!isPlaybackAllowed || isLoading}
-                  >
-                    {!isPlaying ? (
-                      <Feather name="play" size={24} color={greyColor} />
-                    ) : (
+                <View style={[styles.buttonsContainerBase, styles.buttonsContainerTopRow]}>
+                  <View style={styles.volumeContainer}>
+                    <TouchableHighlight
+                      underlayColor={BACKGROUND_COLOR}
+                      style={styles.wrapper}
+                      onPress={_onMutePressed}
+                      disabled={!isPlaybackAllowed || isLoading}
+                    >
+                      {muted ? (
+                        <Ionicons name="md-volume-mute-outline" size={35} color={greyColor} />
+                      ) : (
+                        <Ionicons name="volume-high-outline" size={35} color={greyColor} />
+                      )}
+                    </TouchableHighlight>
+                    <Slider
+                      style={styles.volumeSlider}
+                      trackImage={Icons.TRACK_1.module}
+                      thumbImage={Icons.THUMB_2.module}
+                      value={1}
+                      onValueChange={_onVolumeSliderValueChange}
+                      disabled={!isPlaybackAllowed || isLoading}
+                    />
+                  </View>
+                  <View style={styles.playStopContainer}>
+                    <TouchableHighlight
+                      underlayColor={BACKGROUND_COLOR}
+                      style={styles.wrapper}
+                      onPress={_onPlayPausePressed}
+                      disabled={!isPlaybackAllowed || isLoading}
+                    >
+                      {!isPlaying ? (
+                        <Feather name="play" size={24} color={greyColor} />
+                      ) : (
+                        <AntDesign name="pause" size={24} color={greyColor} />
+                      )}
+                    </TouchableHighlight>
+                    <TouchableHighlight
+                      underlayColor={BACKGROUND_COLOR}
+                      style={styles.wrapper}
+                      onPress={_onStopPressed}
+                      disabled={!isPlaybackAllowed || isLoading}
+                    >
                       <Ionicons name="stop-outline" size={24} color={greyColor} />
-                    )}
-                  </TouchableHighlight>
-                  <TouchableHighlight
-                    underlayColor={BACKGROUND_COLOR}
-                    style={styles.wrapper}
-                    onPress={_onStopPressed}
-                    disabled={!isPlaybackAllowed || isLoading}
-                  >
-                    <Ionicons name="stop-outline" size={24} color={greyColor} />
-                  </TouchableHighlight>
+                    </TouchableHighlight>
+                  </View>
+                  <View />
                 </View>
                 <View />
+                <View style={styles.saveandBackStyle}>
+                  <Button mode="text" onPress={() => navigateAway()}>
+                    Cancel
+                  </Button>
+                  <Button disabled={soundDuration == null} mode="text" onPress={() => saveAudio()}>
+                    Save
+                  </Button>
+                </View>
               </View>
-              <View style={[styles.buttonsContainerBase, styles.buttonsContainerBottomRow]}>
-                <Text>Rate:</Text>
-                <Slider
-                  style={styles.rateSlider}
-                  trackImage={Icons.TRACK_1.module}
-                  thumbImage={Icons.THUMB_1.module}
-                  value={rate / RATE_SCALE}
-                  onSlidingComplete={_onRateSliderSlidingComplete}
-                  disabled={!isPlaybackAllowed || isLoading}
-                />
-                <TouchableHighlight
-                  underlayColor={BACKGROUND_COLOR}
-                  style={styles.wrapper}
-                  onPress={_onPitchCorrectionPressed}
-                  disabled={!isPlaybackAllowed || isLoading}
-                >
-                  <Text>PC: {shouldCorrectPitch ? 'yes' : 'no'}</Text>
-                </TouchableHighlight>
-              </View>
-              <View />
             </View>
           </View>
         </>
@@ -470,6 +469,18 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     minHeight: DEVICE_HEIGHT / 2.0,
     maxHeight: DEVICE_HEIGHT / 2.0,
+  },
+  innerHalfScreenContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    alignSelf: 'stretch',
+  },
+  saveandBackStyle: {
+    flexDirection: 'row',
+    minHeight: DEVICE_HEIGHT / 4.0,
+    minWidth: DEVICE_WIDTH / 4.0,
   },
   recordingContainer: {
     flex: 1,
