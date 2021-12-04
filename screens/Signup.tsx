@@ -118,7 +118,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   scrollView: {
-    marginHorizontal: 100,
+    width: "100%",
+    marginLeft: "30%"
   },
   inputView: {
     borderColor: "#AEACAB",
