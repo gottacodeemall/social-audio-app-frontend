@@ -26,7 +26,7 @@ const injectToken = (config: AxiosRequestConfig): AxiosRequestConfig => {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
-  } catch (error) {
+  } catch (error: any) {
     throw new Error(error);
   }
 };
@@ -40,7 +40,7 @@ class Http {
 
   initHttp() {
     const http = axios.create({
-      baseURL: 'https://api.example.com',
+      baseURL: 'https://74pataqajg.execute-api.us-east-1.amazonaws.com/test',
       headers,
       withCredentials: true,
     });
