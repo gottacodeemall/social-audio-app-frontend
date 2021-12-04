@@ -36,16 +36,27 @@ function Login({ navigation }) {
   const [response, setResponse] = useState([]);
   const [success, setSucess] = useState<boolean>(true);
   const CallLogin = async () => {
-    const responseFromApi = await login(email, password);
-    setResponse(responseFromApi);
-    setSucess(response.success);
-    if (response.success) {
-      dispatch(updateState(updateIsUserLoggedIn, email));
-      navigation.navigate('Home');
-    }
-    console.log('Api Response');
-    console.log(response);
-    console.log(response.success);
+    login(email, password).then((response) => {
+      setResponse(response);
+      setSucess(response.success);
+      if (response.success) {
+        dispatch(updateState(updateIsUserLoggedIn, email));
+        navigation.navigate('Home');
+      }
+      console.log('Api Response');
+      console.log(response);
+      console.log(response.success);
+    });
+    // const responseFromApi = await login(email, password);
+    // setResponse(responseFromApi);
+    // setSucess(response.success);
+    // if (response.success) {
+    //   dispatch(updateState(updateIsUserLoggedIn, email));
+    //   navigation.navigate('Home');
+    // }
+    // console.log('Api Response');
+    // console.log(response);
+    // console.log(response.success);
   };
 
   return (
