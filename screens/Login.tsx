@@ -16,20 +16,7 @@ import { updateIsUserLoggedIn, updateState } from '../redux/actions';
 
 const Stack = createNativeStackNavigator();
 
-function MyStack() {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Signup" component={Signup} />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-}
-
 function Login({ navigation }) {
-  // const loggedInUser = useSelector((state) => state.generic.loggedInUser);
-
   const dispatch = useDispatch();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -43,20 +30,7 @@ function Login({ navigation }) {
         dispatch(updateState(updateIsUserLoggedIn, email));
         navigation.navigate('Home');
       }
-      console.log('Api Response');
-      console.log(response);
-      console.log(response.success);
     });
-    // const responseFromApi = await login(email, password);
-    // setResponse(responseFromApi);
-    // setSucess(response.success);
-    // if (response.success) {
-    //   dispatch(updateState(updateIsUserLoggedIn, email));
-    //   navigation.navigate('Home');
-    // }
-    // console.log('Api Response');
-    // console.log(response);
-    // console.log(response.success);
   };
 
   return (

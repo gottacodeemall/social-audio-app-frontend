@@ -30,6 +30,7 @@ import AudioRecorder from '../components/audioRecorder/AudioRecorder';
 import Dashboard from '../screens/Dashboard';
 import Login from '../screens/Login';
 import Signup from '../screens/Signup';
+import QuestionAnswer from '../screens/QuestionAnswer';
 const val = 0;
 import QuestionScreen from '../screens/QuestionScreen';
 import DiscussionScreen from '../screens/DiscussionScreen';
@@ -116,6 +117,8 @@ function RootNavigator() {
       <Stack.Screen name="Question" component={QuestionScreen} />
       <Stack.Screen name="Signup" component={Signup} />
       <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen name="QuestionAnswer" component={QuestionAnswer} />
+      <Stack.Screen name="Record" component={AudioRecorder} />
     </Stack.Navigator>
   );
 }
@@ -128,6 +131,7 @@ function RootNavigator1() {
       <Stack1.Screen name="Root" component={BottomTabNavigator1} options={{ headerShown: false }} />
       <Stack1.Screen name="Home" component={Dashboard} />
       <Stack1.Screen name="Login" component={Login} />
+      <Stack.Screen name="QuestionAnswer" component={QuestionAnswer} />
     </Stack1.Navigator>
   );
 }

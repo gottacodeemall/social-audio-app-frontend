@@ -36,4 +36,9 @@ export interface Discussion {
   discussion_status: string;
   meeting_info: string;
   answered_by: string;
+export interface Answer {
+  answerId: string;
+  question: string;
+  audio: string;
+  answeredBy: string;
 }
