@@ -1,6 +1,6 @@
 /*eslint node/no-restricted-import: ["error", ["react-native-aws3-upload"]]*/
 import { QueryParams } from 'expo-linking';
-import { Question, User } from './contracts';
+import { Answer, Question, User } from './contracts';
 import { http } from './http';
 import { RNS3, File, Options } from 'react-native-aws3';
 import 'react-native-get-random-values';
@@ -15,12 +15,8 @@ export const fetchUsers = async (): Promise<User[]> => {
 
 export const login = async (email, password) => {
   const queryUrl = '/login?email=' + email + '&' + 'password=' + password;
-  // console.log(baseURL + queryUrl);
-  // const { data } = await http.get(queryUrl);
   const response = await fetch(baseURL + queryUrl);
-  // console.log((await response.json()));
   const json = await response.json();
-  // console.log(json)
   return json;
 };
 
@@ -36,8 +32,6 @@ export const signup = async (
   phoneNumber
 ) => {
   const queryUrl = '/signup';
-  // console.log(baseURL + queryUrl);
-  // const { data } = await http.get(queryUrl);
   const response = await fetch(baseURL + queryUrl, {
     method: 'POST',
     headers: {
@@ -56,43 +50,28 @@ export const signup = async (
       phoneNumber: phoneNumber,
     }),
   });
-  // console.log((await response.json()));
   const json = await response.json();
-  // console.log(json)
   return json;
 };
 
 export const fetchQuestions = async () => {
   const queryUrl = '/dashboard/relevantquestionsforhomepage';
-  // console.log(baseURL + queryUrl);
-  // const { data } = await http.get(queryUrl);
   const response = await fetch(baseURL + queryUrl);
-
-  // console.log((await response.json()));
   const json = await response.json();
-  // console.log(json)
   return json;
 };
 
 export const getQuestion = async (questionId) => {
   const queryUrl = '/question?questionId=' + questionId;
-  // console.log(baseURL + queryUrl);
-  // const { data } = await http.get(queryUrl);
   const response = await fetch(baseURL + queryUrl);
-  // console.log((await response.json()));
   const json = await response.json();
-  // console.log(json)
   return json;
 };
 
 export const getAnswer = async (questionId) => {
   const queryUrl = '/answer?questionId=' + questionId;
-  // console.log(baseURL + queryUrl);
-  // const { data } = await http.get(queryUrl);
   const response = await fetch(baseURL + queryUrl);
-  // console.log((await response.json()));
   const json = await response.json();
-  // console.log(json)
   return json;
 };
 
@@ -111,6 +90,24 @@ export const saveQuestionApi = async (question: Question) => {
     },
     body: JSON.stringify(question),
   });
+};
+
+export const saveAnswerApi = async (answer: Answer) => {
+  if (answer.audio && answer.audio != '')
+    answer.audio = await uploadFileToS3(answer.audio, typeOfFile.Audio);
+  const queryUrl = '/answer';
+  try {
+    return fetch(baseURL + queryUrl, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(answer),
+    });
+  } catch (e) {
+    console.log('error at answer api', e);
+  }
 };
 
 export enum typeOfFile {
@@ -151,7 +148,6 @@ const uploadFileToS3 = async (fileUri: string, objectType: typeOfFile): Promise<
     secretKey: 'gfXHal7bEZI0hM/91Uhj9hegVjJzE5CI+yNvncRp',
     successActionStatus: 201,
   };
-  console.log(file, options);
   try {
     const response = await RNS3.put(file, options);
     return response?.body?.postResponse?.location ?? '';

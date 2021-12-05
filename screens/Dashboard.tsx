@@ -43,7 +43,7 @@ const cardStyles = StyleSheet.create({
   },
 });
 
-const MyComponent = ({navigation}) => {
+const MyComponent = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(false);
   const onChangeSearch = (query: React.SetStateAction<string>) => setSearchQuery(query);
@@ -56,8 +56,6 @@ const MyComponent = ({navigation}) => {
   React.useEffect(() => {
     async function apitesting() {
       setIsLoading(true);
-      //console.log('here');
-      // React.useEffect
       fetchQuestions().then((response: HomePageCategoryQuestions[]) => {
         setIsLoading(false);
         setResponse(response);
@@ -75,41 +73,6 @@ const MyComponent = ({navigation}) => {
     }
     apitesting();
   }, []);
-  // const items: (
-  //   | boolean
-  //   | React.ReactChild
-  //   | React.ReactFragment
-  //   | React.ReactPortal
-  //   | null
-  //   | undefined
-  // )[] = React.useState([]);
-
-  //const elements = ['one', 'two', 'three'];
-  //const items: any[] = [];
-  // React.useEffect(() => {
-  //   for (const val of response.entries()) {
-  //     items_category.push(val[1]['homePageCategory']);
-  //     // const questions: any[] = [];
-  //     // questions.push(val[1]['questions']);
-  //     // console.log('hihihih');
-  //     // console.log(questions[0]);
-  //     for (const q_val of val[1]['questions']) {
-  //       // console.log('Testing');
-  //       // console.log(q_val['caption']);
-  //       items.push(q_val['caption']);
-  //       items1.push(q_val['postedBy']);
-  //       items2.push(q_val['thumbnailUrl']);
-  //     }
-  //   }
-  //   //   for (const v of val.entries()) {
-  //   //     items.push({ v });
-  //   //   }
-  //   // }
-  //   setItems(items_category);
-  //   setItems1(items);
-  //   setItems2(items1);
-  //   setItems3(items2);
-  // }, []);
 
   return (
     <View style={{ backgroundColor: 'white', height: '100%' }}>
@@ -135,16 +98,14 @@ const MyComponent = ({navigation}) => {
             Trending
           </Text>
           <ScrollView horizontal={true}>
-            {/* <View
-              style={{
-                margin: 10,
-                alignContent: 'center',
-                flex: 1,
-                flexDirection: 'row',
-              }}
-            > */}
             {trending.map((item) => (
-              <Card key={item.questionId} style={cardStyles.card} onPress={() => navigation.navigate("QuestionAnswer",{questionId:item.questionId})} >
+              <Card
+                key={item.questionId}
+                style={cardStyles.card}
+                onPress={() =>
+                  navigation.navigate('QuestionAnswer', { questionId: item.questionId })
+                }
+              >
                 <Card.Content>
                   <Title style={cardStyles.cardCaption}>{item.caption}</Title>
                   <Paragraph style={cardStyles.cardPosted}>{item.postedBy}</Paragraph>
@@ -152,7 +113,6 @@ const MyComponent = ({navigation}) => {
                 <Card.Cover style={cardStyles.cardCover} source={{ uri: item.thumbnailUrl }} />
               </Card>
             ))}
-            {/* </View> */}
           </ScrollView>
 
           <Text
@@ -167,9 +127,14 @@ const MyComponent = ({navigation}) => {
             Latest
           </Text>
           <ScrollView horizontal={true}>
-            {/* <View style={{ margin: 10, alignContent: 'center', flex: 1, flexDirection: 'row' }}> */}
             {latest.map((item) => (
-              <Card key={item.questionId} style={cardStyles.card} onPress={() => navigation.navigate("QuestionAnswer",{questionId:item.questionId})}>
+              <Card
+                key={item.questionId}
+                style={cardStyles.card}
+                onPress={() =>
+                  navigation.navigate('QuestionAnswer', { questionId: item.questionId })
+                }
+              >
                 <Card.Content>
                   <Title style={cardStyles.cardCaption}>{item.caption}</Title>
                   <Paragraph style={cardStyles.cardPosted}>{item.postedBy}</Paragraph>
@@ -177,7 +142,6 @@ const MyComponent = ({navigation}) => {
                 <Card.Cover style={cardStyles.cardCover} source={{ uri: item.thumbnailUrl }} />
               </Card>
             ))}
-            {/* </View> */}
           </ScrollView>
 
           <Text
@@ -192,9 +156,14 @@ const MyComponent = ({navigation}) => {
             Location
           </Text>
           <ScrollView horizontal={true}>
-            {/* <View style={{ margin: 10, alignContent: 'center', flex: 1, flexDirection: 'row' }}> */}
             {location.map((item) => (
-              <Card key={item.questionId} style={cardStyles.card} onPress={() => navigation.navigate("QuestionAnswer",{questionId:item.questionId})}>
+              <Card
+                key={item.questionId}
+                style={cardStyles.card}
+                onPress={() =>
+                  navigation.navigate('QuestionAnswer', { questionId: item.questionId })
+                }
+              >
                 <Card.Content>
                   <Title style={cardStyles.cardCaption}>{item.caption}</Title>
                   <Paragraph style={cardStyles.cardPosted}>{item.postedBy}</Paragraph>
@@ -202,7 +171,6 @@ const MyComponent = ({navigation}) => {
                 <Card.Cover style={cardStyles.cardCover} source={{ uri: item.thumbnailUrl }} />
               </Card>
             ))}
-            {/* </View> */}
           </ScrollView>
         </>
       )}

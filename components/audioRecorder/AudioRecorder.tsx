@@ -8,7 +8,7 @@ import { useRef } from 'react';
 import { AntDesign, Feather, FontAwesome, FontAwesome5, Ionicons } from '@expo/vector-icons';
 import { Button } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/core';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { audioUpdateRecordingURI, updateState } from '../../redux/actions';
 
 const { width: DEVICE_WIDTH, height: DEVICE_HEIGHT } = Dimensions.get('window');
@@ -17,9 +17,8 @@ const greyColor = '#000000';
 const LIVE_COLOR = '#FF0000';
 const DISABLED_OPACITY = 0.5;
 
-export default function AudioRecorder(props: any) {
+export default function AudioRecorder(props) {
   const navigation = useNavigation();
-  console.log('props', props);
   let recording: MutableRefObject<Audio.Recording | null> = useRef(null);
   let sound: MutableRefObject<Audio.Sound | null> = useRef(null);
   let isSeeking: MutableRefObject<boolean> = useRef(false);
@@ -47,6 +46,9 @@ export default function AudioRecorder(props: any) {
 
   useEffect(() => {
     setFontLoaded(true);
+    updateRecordingUri('');
+    sound.current = null;
+    recording.current = null;
     _askForPermission();
   }, []);
 
@@ -163,7 +165,6 @@ export default function AudioRecorder(props: any) {
       return;
     }
     const info = await FileSystem.getInfoAsync(recording.current.getURI() || '');
-    console.log(`FILE INFO: ${JSON.stringify(info)}`);
     await Audio.setAudioModeAsync({
       allowsRecordingIOS: false,
       interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
@@ -289,10 +290,18 @@ export default function AudioRecorder(props: any) {
     if (recording.current) {
       const uri = recording.current.getURI();
       updateRecordingUri(uri ?? undefined);
-      if (props.route.params.postSaveRedirection) {
+      if (props?.route?.params?.postSaveRedirection) {
         const redirectionString = props.route.params.postSaveRedirection,
-          redirectionParams = props.route.params.postSaveRedirectionParams;
-        navigation.navigate(redirectionString, redirectionParams);
+          redirectionParams = props.route.params.postSaveRedirectionParams,
+          postSaveExecutor = props.route.params.postSaveExecutor,
+          postSaveExecutorParams = props.route.params.postSaveExecutorParams;
+        postSaveExecutorParams.audio = uri;
+        postSaveExecutor(postSaveExecutorParams)
+          .then(() => {
+            console.log('navigating away');
+            navigation.navigate(redirectionString, redirectionParams);
+          })
+          .catch((error) => console.log('error at audio recorder', error));
       } else {
         navigation.navigate('Question');
       }

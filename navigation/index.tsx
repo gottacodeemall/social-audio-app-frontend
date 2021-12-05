@@ -117,6 +117,7 @@ function RootNavigator() {
       <Stack.Screen name="Signup" component={Signup} />
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="QuestionAnswer" component={QuestionAnswer} />
+      <Stack.Screen name="Record" component={AudioRecorder} />
     </Stack.Navigator>
   );
 }
@@ -129,6 +130,7 @@ function RootNavigator1() {
       <Stack1.Screen name="Root" component={BottomTabNavigator1} options={{ headerShown: false }} />
       <Stack1.Screen name="Home" component={Dashboard} />
       <Stack1.Screen name="Login" component={Login} />
+      <Stack.Screen name="QuestionAnswer" component={QuestionAnswer} />
     </Stack1.Navigator>
   );
 }
@@ -200,7 +202,7 @@ function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="Record"
-        children={() => <AudioRecorder/>}
+        children={() => <AudioRecorder />}
         options={{
           title: 'Ask Question',
           tabBarIcon: ({ color }) => <FontAwesome name="microphone" size={24} color={color} />,
