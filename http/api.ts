@@ -1,6 +1,14 @@
 /*eslint node/no-restricted-import: ["error", ["react-native-aws3-upload"]]*/
 import { QueryParams } from 'expo-linking';
-import { Answer, Question, User } from './contracts';
+import {
+  AcceptedDiscussionResponse,
+  Discussion,
+  DiscussionRequest,
+  PendingDiscussionResponse,
+  Question,
+  User,
+  Answer,
+} from './contracts';
 import { http } from './http';
 import { RNS3, File, Options } from 'react-native-aws3';
 import 'react-native-get-random-values';
@@ -90,6 +98,78 @@ export const saveQuestionApi = async (question: Question) => {
     },
     body: JSON.stringify(question),
   });
+};
+
+export const getPendingDiscussions = async (
+  loggedInUser: string
+): Promise<PendingDiscussionResponse[]> => {
+  const parameters: DiscussionRequest = {
+    user_id: loggedInUser,
+    question_id: '',
+  };
+  const queryUrl = '/discussion/pending';
+
+  try {
+    const response = await fetch(baseURL + queryUrl, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(parameters),
+    });
+    const json = await response.json();
+    return json?.data;
+  } catch (ex) {
+    console.log(ex);
+  }
+
+  return [];
+};
+
+export const getAcceptedDiscussions = async (
+  loggedInUser: string
+): Promise<AcceptedDiscussionResponse[]> => {
+  const parameters: DiscussionRequest = {
+    user_id: loggedInUser,
+    question_id: '',
+  };
+  const queryUrl = '/discussion/accepted';
+  try {
+    const response = await fetch(baseURL + queryUrl, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(parameters),
+    });
+    const json = await response.json();
+    return json?.data;
+  } catch (ex) {
+    console.log(ex);
+  }
+
+  return [];
+};
+
+export const discussionAccepted = async (questionId: string, loggedInUser: string) => {
+  const parameters: DiscussionRequest = {
+    user_id: loggedInUser,
+    question_id: questionId,
+  };
+  const queryUrl = '/discussion/acceptRequest';
+  const response = await fetch(baseURL + queryUrl, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(parameters),
+  });
+
+  const json = await response.json();
+  return json?.success === true;
 };
 
 export const saveAnswerApi = async (answer: Answer) => {

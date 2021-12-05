@@ -33,6 +33,7 @@ import Signup from '../screens/Signup';
 import QuestionAnswer from '../screens/QuestionAnswer';
 const val = 0;
 import QuestionScreen from '../screens/QuestionScreen';
+import DiscussionScreen from '../screens/DiscussionScreen';
 import { useSelector } from 'react-redux';
 
 const styles = StyleSheet.create({
@@ -210,7 +211,7 @@ function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="Discussion"
-        component={Signup}
+        component={DiscussionScreen}
         options={{
           title: 'Discussions',
           tabBarIcon: ({ color }) => <Octicons name="comment-discussion" size={24} color={color} />,
