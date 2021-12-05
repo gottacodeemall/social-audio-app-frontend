@@ -69,3 +69,25 @@ export const fetchQuestions = async () => {
   // console.log(json)
   return json;
 };
+
+export const getQuestion = async (questionId) => {
+  const queryUrl = '/question?questionId=' + questionId;
+  // console.log(baseURL + queryUrl);
+  // const { data } = await http.get(queryUrl);
+  const response = await fetch(baseURL + queryUrl);
+  // console.log((await response.json()));
+  const json = await response.json();
+  // console.log(json)
+  return json;
+};
+
+export const getAnswer = async (questionId) => {
+  const queryUrl = '/answer?questionId=' + questionId;
+  // console.log(baseURL + queryUrl);
+  // const { data } = await http.get(queryUrl);
+  const response = await fetch(baseURL + queryUrl);
+  // console.log((await response.json()));
+  const json = await response.json();
+  // console.log(json)
+  return json;
+};

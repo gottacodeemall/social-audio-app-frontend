@@ -43,7 +43,7 @@ const cardStyles = StyleSheet.create({
   },
 });
 
-const MyComponent = () => {
+const MyComponent = ({navigation}) => {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(false);
   const onChangeSearch = (query: React.SetStateAction<string>) => setSearchQuery(query);
@@ -144,7 +144,7 @@ const MyComponent = () => {
               }}
             > */}
             {trending.map((item) => (
-              <Card key={item.caption} style={cardStyles.card}>
+              <Card key={item.caption} style={cardStyles.card} onPress={() => navigation.navigate("QuestionAnswer",{questionId:item.questionId})} >
                 <Card.Content>
                   <Title style={cardStyles.cardCaption}>{item.caption}</Title>
                   <Paragraph style={cardStyles.cardPosted}>{item.postedBy}</Paragraph>
@@ -169,7 +169,7 @@ const MyComponent = () => {
           <ScrollView horizontal={true}>
             {/* <View style={{ margin: 10, alignContent: 'center', flex: 1, flexDirection: 'row' }}> */}
             {latest.map((item) => (
-              <Card key={item.caption} style={cardStyles.card}>
+              <Card key={item.caption} style={cardStyles.card} onPress={() => navigation.navigate("QuestionAnswer",{questionId:item.questionId})}>
                 <Card.Content>
                   <Title style={cardStyles.cardCaption}>{item.caption}</Title>
                   <Paragraph style={cardStyles.cardPosted}>{item.postedBy}</Paragraph>
@@ -194,7 +194,7 @@ const MyComponent = () => {
           <ScrollView horizontal={true}>
             {/* <View style={{ margin: 10, alignContent: 'center', flex: 1, flexDirection: 'row' }}> */}
             {location.map((item) => (
-              <Card key={item.caption} style={cardStyles.card}>
+              <Card key={item.caption} style={cardStyles.card} onPress={() => navigation.navigate("QuestionAnswer",{questionId:item.questionId})}>
                 <Card.Content>
                   <Title style={cardStyles.cardCaption}>{item.caption}</Title>
                   <Paragraph style={cardStyles.cardPosted}>{item.postedBy}</Paragraph>

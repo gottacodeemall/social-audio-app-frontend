@@ -24,6 +24,7 @@ import Dashboard from '../screens/Dashboard';
 import Question from '../screens/Question';
 import Login from '../screens/Login';
 import Signup from '../screens/Signup';
+import QuestionAnswer from '../screens/QuestionAnswer';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -53,6 +54,7 @@ function RootNavigator() {
       <Stack.Screen name="Question" component={Question} />
       <Stack.Screen name="Signup" component={Signup} />
       <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen name="QuestionAnswer" component={QuestionAnswer} />
     </Stack.Navigator>
   );
 }
