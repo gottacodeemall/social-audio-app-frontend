@@ -36,6 +36,27 @@ export interface Discussion {
   discussion_status: string;
   meeting_info: string;
   answered_by: string;
+}
+
+export interface DiscussionRequest {
+  user_id: string;
+  question_id: string;
+}
+
+export interface AcceptedDiscussionResponse {
+  question_id: string;
+  caption: string;
+  posted_by: string;
+  meeting_info: string;
+  phonenumber: string;
+}
+
+export interface PendingDiscussionResponse {
+  question_id: string;
+  caption: string;
+  posted_by: string;
+}
+
 export interface Answer {
   answerId: string;
   question: string;
