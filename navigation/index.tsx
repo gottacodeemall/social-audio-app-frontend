@@ -24,6 +24,7 @@ import Dashboard from '../screens/Dashboard';
 import Login from '../screens/Login';
 import Signup from '../screens/Signup';
 import QuestionScreen from '../screens/QuestionScreen';
+import DiscussionScreen from '../screens/DiscussionScreen';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -91,7 +92,7 @@ function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="Record"
-        children={() => <AudioRecorder postSaveRedirection={'Question'} />}
+        children={() => <AudioRecorder />}
         options={{
           title: 'Ask Question',
           tabBarIcon: ({ color }) => <FontAwesome name="microphone" size={24} color={color} />,
@@ -99,7 +100,7 @@ function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="Discussion"
-        component={Signup}
+        component={DiscussionScreen}
         options={{
           title: 'Discussions',
           tabBarIcon: ({ color }) => <Octicons name="comment-discussion" size={24} color={color} />,

@@ -28,3 +28,12 @@ export interface ApiResponse {
   success: boolean;
   error: string;
 }
+
+export interface Discussion {
+  discussion_id: string;
+  question: string;
+  answer: string;
+  discussion_status: string;
+  meeting_info: string;
+  answered_by: string;
+}

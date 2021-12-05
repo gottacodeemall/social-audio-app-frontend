@@ -1,6 +1,6 @@
 /*eslint node/no-restricted-import: ["error", ["react-native-aws3-upload"]]*/
 import { QueryParams } from 'expo-linking';
-import { Question, User } from './contracts';
+import { Discussion, Question, User } from './contracts';
 import { http } from './http';
 import { RNS3, File, Options } from 'react-native-aws3';
 import 'react-native-get-random-values';
@@ -90,6 +90,16 @@ export const saveQuestionApi = async (question: Question) => {
     body: JSON.stringify(question),
   });
 };
+
+export const getPendingDiscussions = async (loggedInUser: string): Promise<Discussion[]> => {
+  return [];
+};
+
+export const getAcceptedDiscussions = async (loggedInUser: string): Promise<Discussion[]> => {
+  return [];
+};
+
+export const discussionAccepted = async (answerId: string) => {};
 
 export enum typeOfFile {
   Audio,
