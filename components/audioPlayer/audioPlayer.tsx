@@ -145,7 +145,6 @@ export default function AudioPlayer(props: AudioPlayerProps) {
   };
 
   const _getSeekSliderPosition = () => {
-    console.log('sound', soundPosition, soundDuration);
     if (sound.current != null && soundPosition != null && soundDuration != null) {
       return soundPosition / soundDuration;
     }
