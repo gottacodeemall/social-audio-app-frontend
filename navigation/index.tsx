@@ -200,7 +200,7 @@ function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="Record"
-        children={() => <AudioRecorder postSaveRedirection={'Question'} />}
+        children={() => <AudioRecorder/>}
         options={{
           title: 'Ask Question',
           tabBarIcon: ({ color }) => <FontAwesome name="microphone" size={24} color={color} />,

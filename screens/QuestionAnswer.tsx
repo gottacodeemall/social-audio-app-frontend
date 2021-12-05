@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import { Button, Platform, Image, StyleSheet, TextInput, Dimensions, ScrollView, Pressable } from 'react-native';
 import * as reactNativePaper from 'react-native-paper';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import AudioPlayer from '../components/audioPlayer/audioPlayer';
 
 import { View, Text } from '../components/Themed';
 import { getAnswer, getQuestion } from '../http/api';
 import { FontAwesome } from '@expo/vector-icons';
+import { audioUpdateRecordingURI, updateState } from '../redux/actions';
 const { width: DEVICE_WIDTH, height: DEVICE_HEIGHT } = Dimensions.get('window');
 const BACKGROUND_COLOR = '#EEEEEE';
 
@@ -21,6 +22,7 @@ export default function QuestionAnswer(props) {
   const [audio, setAudio] = useState<string | null>(null);
   const [isLoading, setIsLoading] = React.useState(false);
   const [answers, setAnswers] = React.useState([]);
+  const dispatch = useDispatch();
 
   const recordingUri = useSelector((state: any) => state.audio.recordingUri);
   useEffect(() => {
@@ -43,6 +45,11 @@ export default function QuestionAnswer(props) {
       }
     fetchQuestion();
   }, []);
+
+  function record() {
+    dispatch(updateState(audioUpdateRecordingURI, ""));
+    props.navigation.navigate("Record",{postSaveRedirection:'QuestionAnswer', postSaveRedirectionParams:{questionId: questionId}})
+  }
 
   return (
     <View style={styles.mainContainer}>
@@ -70,7 +77,7 @@ export default function QuestionAnswer(props) {
       <Text>
             <Text>Answer this question: </Text>
                 <Pressable
-                    onPress={() => props.navigation.navigate("Record",{})}
+                    onPress={() => record()}
                     style={({ pressed }) => ({
                         opacity: pressed ? 0.5 : 1,
                     })}

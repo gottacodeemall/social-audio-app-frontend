@@ -22,12 +22,21 @@ export default function Signup({navigation}) {
     const [phoneNumber, setPhoneNumber] = useState("");
     const [response, setResponse] = useState([]);
     const CallSignUp = async () => {
-        const responseFromApi = await signup(email,password,firstName,lastName,age,gender,ethnicity,intro,phoneNumber)
-        setResponse(responseFromApi)
-        console.log("Api Response")
-        console.log(response)
-        console.log(response.success)
-        {response.success? navigation.navigate('Login') : (true)}
+        signup(email,password,firstName,lastName,age,gender,ethnicity,intro,phoneNumber).then((response) => {
+            setResponse(response);
+            if (response.success) {
+              navigation.navigate('Login');
+            }
+            console.log('Api Response');
+            console.log(response);
+            console.log(response.success);
+          });
+        // const responseFromApi = await signup(email,password,firstName,lastName,age,gender,ethnicity,intro,phoneNumber)
+        // setResponse(responseFromApi)
+        // console.log("Api Response")
+        // console.log(response)
+        // console.log(response.success)
+        // {response.success? navigation.navigate('Login') : (true)}
     }
   return (
     <View style={styles.container}>
