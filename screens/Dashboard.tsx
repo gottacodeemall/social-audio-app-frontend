@@ -144,7 +144,7 @@ const MyComponent = ({navigation}) => {
               }}
             > */}
             {trending.map((item) => (
-              <Card key={item.caption} style={cardStyles.card} onPress={() => navigation.navigate("QuestionAnswer",{questionId:item.questionId})} >
+              <Card key={item.questionId} style={cardStyles.card} onPress={() => navigation.navigate("QuestionAnswer",{questionId:item.questionId})} >
                 <Card.Content>
                   <Title style={cardStyles.cardCaption}>{item.caption}</Title>
                   <Paragraph style={cardStyles.cardPosted}>{item.postedBy}</Paragraph>
@@ -169,7 +169,7 @@ const MyComponent = ({navigation}) => {
           <ScrollView horizontal={true}>
             {/* <View style={{ margin: 10, alignContent: 'center', flex: 1, flexDirection: 'row' }}> */}
             {latest.map((item) => (
-              <Card key={item.caption} style={cardStyles.card} onPress={() => navigation.navigate("QuestionAnswer",{questionId:item.questionId})}>
+              <Card key={item.questionId} style={cardStyles.card} onPress={() => navigation.navigate("QuestionAnswer",{questionId:item.questionId})}>
                 <Card.Content>
                   <Title style={cardStyles.cardCaption}>{item.caption}</Title>
                   <Paragraph style={cardStyles.cardPosted}>{item.postedBy}</Paragraph>
@@ -194,7 +194,7 @@ const MyComponent = ({navigation}) => {
           <ScrollView horizontal={true}>
             {/* <View style={{ margin: 10, alignContent: 'center', flex: 1, flexDirection: 'row' }}> */}
             {location.map((item) => (
-              <Card key={item.caption} style={cardStyles.card} onPress={() => navigation.navigate("QuestionAnswer",{questionId:item.questionId})}>
+              <Card key={item.questionId} style={cardStyles.card} onPress={() => navigation.navigate("QuestionAnswer",{questionId:item.questionId})}>
                 <Card.Content>
                   <Title style={cardStyles.cardCaption}>{item.caption}</Title>
                   <Paragraph style={cardStyles.cardPosted}>{item.postedBy}</Paragraph>

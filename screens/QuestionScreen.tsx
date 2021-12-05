@@ -4,12 +4,17 @@ import { Button, Platform, Image, StyleSheet, TextInput, Dimensions } from 'reac
 import * as reactNativePaper from 'react-native-paper';
 import { useSelector } from 'react-redux';
 import AudioPlayer from '../components/audioPlayer/audioPlayer';
+import { Question } from '../http/contracts';
+import 'react-native-get-random-values';
+import { v4 as uuidv4 } from 'uuid';
 
 import { View } from '../components/Themed';
+import { saveQuestionApi } from '../http/api';
 const { width: DEVICE_WIDTH, height: DEVICE_HEIGHT } = Dimensions.get('window');
 const BACKGROUND_COLOR = '#EEEEEE';
 
-export default function Question() {
+export default function QuestionScreen() {
+  const loggedInUser = useSelector((state) => state.generic.loggedInUser);
   const [image, setImage] = useState<string | null>(null);
   const [caption, onCaptionChange] = useState<string>('');
   const [hashtags, onHashtagsChange] = useState<string>('');
@@ -24,9 +29,6 @@ export default function Question() {
       aspect: [4, 3],
       quality: 1,
     });
-
-    console.log(result);
-
     if (!result.cancelled) {
       setImage(result.uri);
     }
@@ -36,31 +38,38 @@ export default function Question() {
     return caption == '' || recordingUri == '' ? true : false;
   };
 
-  const generateJSON = () => {
-    const gen = {
+  const generateJSON = (): Question => {
+    const gen: Question = {
+      questionId: uuidv4(),
       caption: caption,
       hashtags: hashtags,
-      users: users,
+      taggedUsers: users,
       location: location,
-      thumbnailUri: image,
-      audioUri: recordingUri,
+      Thumbnail: image ?? '',
+      audio: recordingUri,
+      postedBy: loggedInUser != '' ? loggedInUser : 'test@columbia.edu',
+      categories: '',
+      isPublished: true,
+      questionStatus: 'unanswered',
     };
-    console.log(gen);
     return gen;
   };
 
-  const saveAsDraft = (): void => {
-    generateJSON();
-    // hit saveAsDraft
+  const saveQuestionAsDraft = (): void => {
+    const question = generateJSON();
+    question.isPublished = false;
+    saveQuestionApi(question);
   };
 
-  const saveAudio = (): void => {
-    generateJSON();
+  const saveQuestion = (): void => {
+    const question = generateJSON();
+    saveQuestionApi(question);
     // hit saveAudio
   };
-  const saveAudioAsAnonymous = (): void => {
-    generateJSON();
-    // hit saveAudioAsAnonymous
+  const saveQuestionAsAnonymous = (): void => {
+    const question = generateJSON();
+    question.postedBy = 'test@columbia.edu';
+    saveQuestionApi(question);
   };
 
   useEffect(() => {
@@ -119,7 +128,7 @@ export default function Question() {
       />
       <View style={styles.saveandBackStyle}>
         <View>
-          <reactNativePaper.Button mode="text" onPress={() => saveAsDraft()}>
+          <reactNativePaper.Button mode="text" onPress={() => saveQuestionAsDraft()}>
             Save As Draft
           </reactNativePaper.Button>
         </View>
@@ -127,14 +136,14 @@ export default function Question() {
           <reactNativePaper.Button
             disabled={_setDisabledForSave()}
             mode="text"
-            onPress={() => saveAudioAsAnonymous()}
+            onPress={() => saveQuestion()}
           >
             Publish
           </reactNativePaper.Button>
           <reactNativePaper.Button
             disabled={_setDisabledForSave()}
             mode="text"
-            onPress={() => saveAudio()}
+            onPress={() => saveQuestionAsAnonymous()}
           >
             Publish As Anonymous
           </reactNativePaper.Button>

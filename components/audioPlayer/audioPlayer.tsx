@@ -238,6 +238,7 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     backgroundColor: BACKGROUND_COLOR,
     minWidth: DEVICE_WIDTH,
+    maxHeight: 100,
   },
   playbackSlider: {
     alignSelf: 'stretch',

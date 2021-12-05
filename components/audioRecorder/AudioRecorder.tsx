@@ -289,8 +289,12 @@ export default function AudioRecorder(props: any) {
     if (recording.current) {
       const uri = recording.current.getURI();
       updateRecordingUri(uri ?? undefined);
-      if (props.postSaveRedirection) {
-        navigation.navigate(props.postSaveRedirection);
+      if (props.route.params.postSaveRedirection) {
+        const redirectionString = props.route.params.postSaveRedirection,
+          redirectionParams = props.route.params.postSaveRedirectionParams;
+        navigation.navigate(redirectionString, redirectionParams);
+      } else {
+        navigation.navigate('Question');
       }
     } else {
       updateRecordingUri(undefined);
