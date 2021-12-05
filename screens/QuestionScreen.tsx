@@ -14,6 +14,7 @@ const { width: DEVICE_WIDTH, height: DEVICE_HEIGHT } = Dimensions.get('window');
 const BACKGROUND_COLOR = '#EEEEEE';
 
 export default function QuestionScreen() {
+  const loggedInUser = useSelector((state) => state.generic.loggedInUser);
   const [image, setImage] = useState<string | null>(null);
   const [caption, onCaptionChange] = useState<string>('');
   const [hashtags, onHashtagsChange] = useState<string>('');
@@ -46,7 +47,7 @@ export default function QuestionScreen() {
       location: location,
       Thumbnail: image ?? '',
       audio: recordingUri,
-      postedBy: 'test@columbia.edu',
+      postedBy: loggedInUser != '' ? loggedInUser : 'test@columbia.edu',
       categories: '',
       isPublished: true,
       questionStatus: 'unanswered',
