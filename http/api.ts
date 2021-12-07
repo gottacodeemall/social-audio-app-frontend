@@ -90,14 +90,21 @@ export const saveQuestionApi = async (question: Question) => {
     question.audio = await uploadFileToS3(question.audio, typeOfFile.Audio);
 
   const queryUrl = '/question';
-  const response = await fetch(baseURL + queryUrl, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(question),
-  });
+  try {
+    const response = await fetch(baseURL + queryUrl, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(question),
+    });
+    const json = await response.json();
+    return json.success == true;
+  } catch (ex) {
+    alert(ex);
+  }
+  return false;
 };
 
 export const getPendingDiscussions = async (
@@ -177,7 +184,7 @@ export const saveAnswerApi = async (answer: Answer) => {
     answer.audio = await uploadFileToS3(answer.audio, typeOfFile.Audio);
   const queryUrl = '/answer';
   try {
-    return fetch(baseURL + queryUrl, {
+    const response = await fetch(baseURL + queryUrl, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -185,6 +192,8 @@ export const saveAnswerApi = async (answer: Answer) => {
       },
       body: JSON.stringify(answer),
     });
+    const json = await response.json();
+    return json;
   } catch (e) {
     console.log('error at answer api', e);
   }

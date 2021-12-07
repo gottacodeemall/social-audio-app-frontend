@@ -78,40 +78,46 @@ export default function QuestionAnswer(props) {
   }
 
   return (
-    <View style={styles.mainContainer}>
-      {isLoading && isFocused ? (
-        <Text>'Is Loading'</Text>
-      ) : (
-        <>
-          {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
-          {audio && (
-            <AudioPlayer recordedUri={audio ?? ''} isSliderEnabled={true} isTimerEnabled={true} />
-          )}
-          <Text>Caption: {caption}</Text>
-          <Text>Hashtags: {hashtags}</Text>
-          <Text>Users: {users}</Text>
-          <Text>
-            <Text>Answer this question: </Text>
-            <Pressable
-              onPress={() => record()}
-              style={({ pressed }) => ({
-                opacity: pressed ? 0.5 : 1,
-              })}
-            >
-              <FontAwesome name="microphone" size={24} color="#5D3EA8" />
-            </Pressable>
-          </Text>
-          <Text>Answers:</Text>
-          {answers.map((item) => (
-            <AudioPlayer
-              recordedUri={item.audio ?? ''}
-              isSliderEnabled={true}
-              isTimerEnabled={true}
-            />
-          ))}
-        </>
-      )}
-    </View>
+    <ScrollView>
+      <View style={styles.mainContainer}>
+        {isLoading && isFocused ? (
+          <Text>'Is Loading'</Text>
+        ) : (
+          <>
+            {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+            {audio && (
+              <AudioPlayer recordedUri={audio ?? ''} isSliderEnabled={true} isTimerEnabled={true} />
+            )}
+            <Text>Caption: {caption}</Text>
+            <Text>Hashtags: {hashtags}</Text>
+            <Text>Users: {users}</Text>
+            <Text>
+              <Text>Answer this question: </Text>
+              <Pressable
+                onPress={() => record()}
+                style={({ pressed }) => ({
+                  opacity: pressed ? 0.5 : 1,
+                })}
+              >
+                <FontAwesome name="microphone" size={24} color="#5D3EA8" />
+              </Pressable>
+            </Text>
+            <Text>Answers:</Text>
+            {answers &&
+              answers.map((item) => (
+                <View style={styles.answerContainer}>
+                  <AudioPlayer
+                    recordedUri={item.audio ?? ''}
+                    isSliderEnabled={true}
+                    isTimerEnabled={true}
+                  />
+                  <Text>Answered By: {item.answeredBy ? item.answeredBy : 'Error'}</Text>
+                </View>
+              ))}
+          </>
+        )}
+      </View>
+    </ScrollView>
   );
 }
 
@@ -140,5 +146,11 @@ const styles = StyleSheet.create({
   publishStyles: {
     marginTop: 20,
     flexDirection: 'row',
+  },
+  answerContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    backgroundColor: BACKGROUND_COLOR,
+    height: 90,
   },
 });
