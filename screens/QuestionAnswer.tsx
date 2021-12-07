@@ -9,6 +9,7 @@ import {
   Dimensions,
   ScrollView,
   Pressable,
+  TouchableOpacity,
 } from 'react-native';
 import * as reactNativePaper from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,7 +18,7 @@ import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 
 import { View, Text } from '../components/Themed';
-import { getAnswer, getQuestion, saveAnswerApi } from '../http/api';
+import { getAnswer, getQuestion, requestChat, saveAnswerApi } from '../http/api';
 import { FontAwesome } from '@expo/vector-icons';
 import { audioUpdateRecordingURI, updateState } from '../redux/actions';
 import { Answer } from '../http/contracts';
@@ -67,6 +68,12 @@ export default function QuestionAnswer(props) {
     };
   };
 
+  const RequestChat = async (answerId) => {
+    requestChat(answerId).then((response) => {
+      
+    });
+  };
+
   function record() {
     dispatch(updateState(audioUpdateRecordingURI, ''));
     props.navigation.navigate('Record', {
@@ -103,11 +110,23 @@ export default function QuestionAnswer(props) {
           </Text>
           <Text>Answers:</Text>
           {answers.map((item) => (
+            <View>
             <AudioPlayer
               recordedUri={item.audio ?? ''}
               isSliderEnabled={true}
               isTimerEnabled={true}
             />
+            <TouchableOpacity style={styles.loginBtn}>
+              <Pressable
+                onPress={(response) => RequestChat(item.answerId)}
+                style={({ pressed }) => ({
+                  opacity: pressed ? 0.5 : 1,
+                })}
+              >
+                <Text style={{ color: 'white' }}>Request Chat</Text>
+              </Pressable>
+            </TouchableOpacity>
+            </View>
           ))}
         </>
       )}
@@ -140,5 +159,14 @@ const styles = StyleSheet.create({
   publishStyles: {
     marginTop: 20,
     flexDirection: 'row',
+  },
+  loginBtn: {
+    width: '70%',
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 40,
+    marginLeft: 200,
+    backgroundColor: '#5D3EA8',
   },
 });

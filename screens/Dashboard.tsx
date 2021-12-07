@@ -19,7 +19,7 @@ const cardStyles = StyleSheet.create({
   },
   card: {
     width: 200,
-    height: 100,
+    height: 200,
     margin: 10,
     padding: 0,
     overflow: 'scroll',
