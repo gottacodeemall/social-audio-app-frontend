@@ -132,6 +132,7 @@ function RootNavigator1() {
       <Stack1.Screen name="Home" component={Dashboard} />
       <Stack1.Screen name="Login" component={Login} />
       <Stack.Screen name="QuestionAnswer" component={QuestionAnswer} />
+      <Stack.Screen name="Signup" component={Signup} />
     </Stack1.Navigator>
   );
 }

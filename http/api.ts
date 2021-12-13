@@ -199,6 +199,23 @@ export const saveAnswerApi = async (answer: Answer) => {
   }
 };
 
+export const requestChat = async (answerId) => {
+  const queryUrl = '/discussion/requestchat';
+  console.log('reached requestChatApi')
+  try {
+    return fetch(baseURL + queryUrl, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({answerId: answerId}),
+    });
+  } catch (e) {
+    console.log('error at requestChat api', e);
+  }
+};
+
 export enum typeOfFile {
   Audio,
   Image,
