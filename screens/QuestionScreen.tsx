@@ -10,10 +10,13 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { View } from '../components/Themed';
 import { saveQuestionApi } from '../http/api';
+import Navigation from '../navigation';
+import { useNavigation } from '@react-navigation/native';
 const { width: DEVICE_WIDTH, height: DEVICE_HEIGHT } = Dimensions.get('window');
 const BACKGROUND_COLOR = '#EEEEEE';
 
 export default function QuestionScreen() {
+  const navigation = useNavigation();
   const loggedInUser = useSelector((state) => state.generic.loggedInUser);
   const [image, setImage] = useState<string | null>(null);
   const [caption, onCaptionChange] = useState<string>('');
@@ -58,18 +61,17 @@ export default function QuestionScreen() {
   const saveQuestionAsDraft = (): void => {
     const question = generateJSON();
     question.isPublished = false;
-    saveQuestionApi(question);
+    saveQuestionApi(question).then((response) => navigation.navigate('Home'));
   };
 
   const saveQuestion = (): void => {
     const question = generateJSON();
-    saveQuestionApi(question);
-    // hit saveAudio
+    saveQuestionApi(question).then((response) => navigation.navigate('Home'));
   };
   const saveQuestionAsAnonymous = (): void => {
     const question = generateJSON();
     question.postedBy = 'test@columbia.edu';
-    saveQuestionApi(question);
+    saveQuestionApi(question).then((response) => navigation.navigate('Home'));
   };
 
   useEffect(() => {

@@ -69,9 +69,7 @@ export default function QuestionAnswer(props) {
   };
 
   const RequestChat = async (answerId) => {
-    requestChat(answerId).then((response) => {
-      
-    });
+    requestChat(answerId).then((response) => {});
   };
 
   function record() {
@@ -85,52 +83,57 @@ export default function QuestionAnswer(props) {
   }
 
   return (
-    <View style={styles.mainContainer}>
-      {isLoading && isFocused ? (
-        <Text>'Is Loading'</Text>
-      ) : (
-        <>
-          {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
-          {audio && (
-            <AudioPlayer recordedUri={audio ?? ''} isSliderEnabled={true} isTimerEnabled={true} />
-          )}
-          <Text>Caption: {caption}</Text>
-          <Text>Hashtags: {hashtags}</Text>
-          <Text>Users: {users}</Text>
-          <Text>
-            <Text>Answer this question: </Text>
-            <Pressable
-              onPress={() => record()}
-              style={({ pressed }) => ({
-                opacity: pressed ? 0.5 : 1,
-              })}
-            >
-              <FontAwesome name="microphone" size={24} color="#5D3EA8" />
-            </Pressable>
-          </Text>
-          <Text>Answers:</Text>
-          {answers.map((item) => (
-            <View>
-            <AudioPlayer
-              recordedUri={item.audio ?? ''}
-              isSliderEnabled={true}
-              isTimerEnabled={true}
-            />
-            <TouchableOpacity style={styles.loginBtn}>
+    <ScrollView>
+      <View style={styles.mainContainer}>
+        {isLoading && isFocused ? (
+          <Text>'Is Loading'</Text>
+        ) : (
+          <>
+            {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+            {audio && (
+              <AudioPlayer recordedUri={audio ?? ''} isSliderEnabled={true} isTimerEnabled={true} />
+            )}
+            <Text>Caption: {caption}</Text>
+            <Text>Hashtags: {hashtags}</Text>
+            <Text>Users: {users}</Text>
+            <Text>
+              <Text>Answer this question: </Text>
               <Pressable
-                onPress={(response) => RequestChat(item.answerId)}
+                onPress={() => record()}
                 style={({ pressed }) => ({
                   opacity: pressed ? 0.5 : 1,
                 })}
               >
-                <Text style={{ color: 'white' }}>Request Chat</Text>
+                <FontAwesome name="microphone" size={24} color="#5D3EA8" />
               </Pressable>
-            </TouchableOpacity>
-            </View>
-          ))}
-        </>
-      )}
-    </View>
+            </Text>
+            <Text>Answers:</Text>
+            {answers.map((item) => (
+              <View>
+                <AudioPlayer
+                  recordedUri={item.audio ?? ''}
+                  isSliderEnabled={true}
+                  isTimerEnabled={true}
+                />
+                <View>
+                  <Text>Answered By: {item.answeredBy ? item.answeredBy : 'Error'}</Text>
+                  <TouchableOpacity style={styles.loginBtn}>
+                    <Pressable
+                      onPress={(response) => RequestChat(item.answerId)}
+                      style={({ pressed }) => ({
+                        opacity: pressed ? 0.5 : 1,
+                      })}
+                    >
+                      <Text style={{ color: 'white' }}>Request Chat</Text>
+                    </Pressable>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            ))}
+          </>
+        )}
+      </View>
+    </ScrollView>
   );
 }
 
@@ -159,6 +162,19 @@ const styles = StyleSheet.create({
   publishStyles: {
     marginTop: 20,
     flexDirection: 'row',
+  },
+  answerContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    backgroundColor: BACKGROUND_COLOR,
+    height: 90,
+    justifyContent: 'flex-start',
+  },
+  horizontalAnswerBottomContainer: {
+    flexDirection: 'row',
+    flex: 1,
+    backgroundColor: BACKGROUND_COLOR,
+    height: 100,
   },
   loginBtn: {
     width: '70%',
