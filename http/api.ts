@@ -216,6 +216,13 @@ export const requestChat = async (answerId) => {
   }
 };
 
+export const getMyQuestions = async (email,status) => {
+  const queryUrl = '/question?email=' + email + '&status=' + status;
+  const response = await fetch(baseURL + queryUrl);
+  const json = await response.json();
+  return json;
+};
+
 export enum typeOfFile {
   Audio,
   Image,
