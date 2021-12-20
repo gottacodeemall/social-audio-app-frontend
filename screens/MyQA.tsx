@@ -16,6 +16,7 @@ import { HomePageCategoryQuestions, Question } from '../http/contracts';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { spotifyDark, spotifyGreen, textColor } from '../constants/Colors';
+import { useIsFocused } from '@react-navigation/native';
 // import { Searchbar } from 'react-native-paper';
 // const LeftContent = props => <Avatar.Icon {...props} icon="folder" />
 
@@ -73,6 +74,7 @@ const cardStyles = StyleSheet.create({
 });
 
 const MyQA = ({ navigation }) => {
+  const isFocused = useIsFocused();
   const [isLoading, setIsLoading] = React.useState(false);
   const loggedInUser = useSelector((state) => state.generic.loggedInUser);
   const [currentScreen, setCurrentScreen] = useState<string>('draft');
@@ -85,8 +87,8 @@ const MyQA = ({ navigation }) => {
       setQuestions(response);
       setIsLoading(false);
     }
-    getquestions();
-  }, [currentScreen]);
+    if (isFocused) getquestions();
+  }, [currentScreen, isFocused]);
 
   const switchScreens = (screen: string) => {
     setCurrentScreen(screen);

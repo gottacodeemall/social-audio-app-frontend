@@ -12,6 +12,8 @@ import { View } from '../components/Themed';
 import { saveQuestionApi } from '../http/api';
 import Navigation from '../navigation';
 import { useNavigation } from '@react-navigation/native';
+import { ActivityIndicator } from 'react-native-paper';
+import { spotifyGreen } from '../constants/Colors';
 const { width: DEVICE_WIDTH, height: DEVICE_HEIGHT } = Dimensions.get('window');
 const BACKGROUND_COLOR = '#EEEEEE';
 
@@ -23,6 +25,7 @@ export default function QuestionScreen() {
   const [hashtags, onHashtagsChange] = useState<string>('');
   const [users, onUsersChange] = useState<string>('');
   const [location, onLocationChange] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const recordingUri = useSelector((state: any) => state.audio.recordingUri);
   const pickImage = async () => {
@@ -61,17 +64,27 @@ export default function QuestionScreen() {
   const saveQuestionAsDraft = (): void => {
     const question = generateJSON();
     question.isPublished = false;
-    saveQuestionApi(question).then((response) => navigation.navigate('Home'));
+    setIsLoading(true);
+    saveQuestionApi(question).then((response) => {
+      setIsLoading(false);
+      navigation.navigate('Home');
+    });
   };
 
   const saveQuestion = (): void => {
     const question = generateJSON();
-    saveQuestionApi(question).then((response) => navigation.navigate('Home'));
+    saveQuestionApi(question).then((response) => {
+      setIsLoading(false);
+      navigation.navigate('Home');
+    });
   };
   const saveQuestionAsAnonymous = (): void => {
     const question = generateJSON();
     question.postedBy = 'test@columbia.edu';
-    saveQuestionApi(question).then((response) => navigation.navigate('Home'));
+    saveQuestionApi(question).then((response) => {
+      setIsLoading(false);
+      navigation.navigate('Home');
+    });
   };
 
   useEffect(() => {
@@ -128,29 +141,33 @@ export default function QuestionScreen() {
         value={location}
         placeholder="Location"
       />
-      <View style={styles.saveandBackStyle}>
-        <View>
-          <reactNativePaper.Button mode="text" onPress={() => saveQuestionAsDraft()}>
-            Save As Draft
-          </reactNativePaper.Button>
+      {isLoading ? (
+        <ActivityIndicator animating={true} color={spotifyGreen} />
+      ) : (
+        <View style={styles.saveandBackStyle}>
+          <View>
+            <reactNativePaper.Button mode="text" onPress={() => saveQuestionAsDraft()}>
+              Save As Draft
+            </reactNativePaper.Button>
+          </View>
+          <View style={styles.publishStyles}>
+            <reactNativePaper.Button
+              disabled={_setDisabledForSave()}
+              mode="text"
+              onPress={() => saveQuestion()}
+            >
+              Publish
+            </reactNativePaper.Button>
+            <reactNativePaper.Button
+              disabled={_setDisabledForSave()}
+              mode="text"
+              onPress={() => saveQuestionAsAnonymous()}
+            >
+              Publish As Anonymous
+            </reactNativePaper.Button>
+          </View>
         </View>
-        <View style={styles.publishStyles}>
-          <reactNativePaper.Button
-            disabled={_setDisabledForSave()}
-            mode="text"
-            onPress={() => saveQuestion()}
-          >
-            Publish
-          </reactNativePaper.Button>
-          <reactNativePaper.Button
-            disabled={_setDisabledForSave()}
-            mode="text"
-            onPress={() => saveQuestionAsAnonymous()}
-          >
-            Publish As Anonymous
-          </reactNativePaper.Button>
-        </View>
-      </View>
+      )}
     </View>
   );
 }
