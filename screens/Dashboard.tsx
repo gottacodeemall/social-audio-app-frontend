@@ -59,9 +59,7 @@ const cardStyles = StyleSheet.create({
 });
 
 const MyComponent = ({ navigation }) => {
-  const [searchQuery, setSearchQuery] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(false);
-  const onChangeSearch = (query: React.SetStateAction<string>) => setSearchQuery(query);
   const [response, setResponse] = React.useState<HomePageCategoryQuestions[]>([]);
   const [items_category, setItems] = React.useState([]);
   const [trending, setTrending] = React.useState<Question[]>([]);
@@ -108,12 +106,6 @@ const MyComponent = ({ navigation }) => {
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <View style={{ height: '100%' }} lightColor={spotifyDark}>
-        {/* <Searchbar
-          placeholder="Search"
-          onChangeText={onChangeSearch}
-          value={searchQuery}
-          autoComplete={true}
-        /> */}
         {isLoading ? (
           <View style={[styles.loaderContainer]}>
             <ActivityIndicator animating={true} color={spotifyGreen} />

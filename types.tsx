@@ -19,6 +19,7 @@ export type RootStackParamList = {
   NotFound: undefined;
   AudioRecorder: undefined;
   Question: undefined;
+  Search: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<
@@ -33,6 +34,7 @@ export type RootTabParamList = {
   Record: undefined;
   Discussion: undefined;
   Profile: undefined;
+  Search: undefined;
 };
 
 export type RootTabScreenProps<Screen extends keyof RootTabParamList> = CompositeScreenProps<
