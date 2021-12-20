@@ -236,7 +236,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'stretch',
     backgroundColor: BACKGROUND_COLOR,
-    minWidth: DEVICE_WIDTH,
+    maxWidth: DEVICE_WIDTH - 20,
     maxHeight: 100,
   },
   playbackSlider: {

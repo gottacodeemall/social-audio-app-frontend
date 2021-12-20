@@ -32,7 +32,7 @@ const cardStyles = StyleSheet.create({
     overflow: 'hidden',
     borderWidth: 2,
     borderRadius: 15,
-    backgroundColor: spotifyDark,
+    backgroundColor: '#333333',
   },
   cardCover: {
     padding: 0,

@@ -1,51 +1,61 @@
 import * as React from 'react';
-import { Avatar, Button, Card, Title, Paragraph, Searchbar } from 'react-native-paper';
+import {
+  Avatar,
+  Button,
+  Card,
+  Title,
+  Paragraph,
+  Searchbar,
+  ActivityIndicator,
+} from 'react-native-paper';
 import { Text, View } from '../components/Themed';
 import { ScrollView, StyleSheet } from 'react-native';
 import * as reactNativePaper from 'react-native-paper';
 import { fetchQuestions, getMyQuestions } from '../http/api';
-import { Item } from 'react-native-paper/lib/typescript/components/List/List';
-import { white } from 'react-native-paper/lib/typescript/styles/colors';
 import { HomePageCategoryQuestions, Question } from '../http/contracts';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { spotifyDark, spotifyGreen, textColor } from '../constants/Colors';
 // import { Searchbar } from 'react-native-paper';
 // const LeftContent = props => <Avatar.Icon {...props} icon="folder" />
 
-const draftScreen = 'draft', postedScreen = 'posted' , answeredScreen = 'answered';
+const draftScreen = 'draft',
+  postedScreen = 'posted',
+  answeredScreen = 'answered';
 
 const cardStyles = StyleSheet.create({
-  container: {
-    display: 'flex',
-    height: 100,
-    width: 20,
-    alignItems: 'flex-start',
-    padding: 30,
-    borderRadius: 20,
-  },
   card: {
     width: 200,
-    height: 200,
+    height: 225,
     margin: 10,
     padding: 0,
-    overflow: 'scroll',
+    overflow: 'hidden',
     borderWidth: 2,
+    borderRadius: 15,
+    backgroundColor: '#333333',
+    alignSelf: 'center',
   },
   cardCover: {
     padding: 0,
     margin: 0,
-    width: '100%',
-    height: '100%',
+    width: 200,
+    height: 150,
     borderWidth: 1,
+    alignSelf: 'center',
+  },
+  cardContent: {
+    height: 50,
   },
   cardCaption: {
-    fontSize: 10,
+    fontSize: 14,
     fontWeight: '500',
     padding: 0,
+    color: textColor,
   },
   cardPosted: {
     fontSize: 10,
     padding: 0,
+    color: textColor,
   },
   buttonsContainer: {
     flexDirection: 'row',
@@ -55,6 +65,11 @@ const cardStyles = StyleSheet.create({
     height: 40,
     alignSelf: 'center',
   },
+  loaderContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    backgroundColor: spotifyDark,
+  },
 });
 
 const MyQA = ({ navigation }) => {
@@ -63,12 +78,11 @@ const MyQA = ({ navigation }) => {
   const [currentScreen, setCurrentScreen] = useState<string>('draft');
   const [questions, setQuestions] = useState([]);
 
-
   useEffect(() => {
     async function getquestions() {
       setIsLoading(true);
-      const response = await getMyQuestions(loggedInUser,currentScreen);
-      setQuestions(response)
+      const response = await getMyQuestions(loggedInUser, currentScreen);
+      setQuestions(response);
       setIsLoading(false);
     }
     getquestions();
@@ -79,49 +93,58 @@ const MyQA = ({ navigation }) => {
   };
 
   return (
-    <View style={{ backgroundColor: 'white', height: '100%' }}>
-      {isLoading ? (
-        <Text>'Is Loading'</Text>
-      ) : (
-        <>
-          <View style={cardStyles.buttonsContainer}>
-            <reactNativePaper.Button disabled={currentScreen == draftScreen} onPress={() => switchScreens(draftScreen)}>
-            Draft
-            </reactNativePaper.Button>
-            <reactNativePaper.Button
-            disabled={currentScreen === postedScreen}
-            onPress={() => switchScreens(postedScreen)}
-            >
-            Posted
-            </reactNativePaper.Button>
-            <reactNativePaper.Button
-            disabled={currentScreen === answeredScreen}
-            onPress={() => switchScreens(answeredScreen)}
-            >
-            Answered
-            </reactNativePaper.Button>
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      <View style={{ height: '100%' }} lightColor={spotifyDark}>
+        {isLoading ? (
+          <View style={[cardStyles.loaderContainer]}>
+            <ActivityIndicator animating={true} color={spotifyGreen} />
           </View>
-          <ScrollView horizontal={false}>
-          {questions &&
-            questions.map((item) => ( 
-              <Card
-                key={item.questionId}
-                style={cardStyles.card}
-                onPress={() =>
-                  navigation.navigate('QuestionAnswer', { questionId: item.questionId })
-                }
+        ) : (
+          <>
+            <View style={cardStyles.buttonsContainer}>
+              <reactNativePaper.Button
+                disabled={currentScreen == draftScreen}
+                onPress={() => switchScreens(draftScreen)}
               >
-                <Card.Content>
-                  <Title style={cardStyles.cardCaption}>{item.caption}</Title>
-                  <Paragraph style={cardStyles.cardPosted}>{item.postedBy}</Paragraph>
-                </Card.Content>
-                <Card.Cover style={cardStyles.cardCover} source={{ uri: item.Thumbnail }} />
-              </Card>
-            ))}
-          </ScrollView>          
-        </>
-      )}
-    </View>
+                Draft
+              </reactNativePaper.Button>
+              <reactNativePaper.Button
+                disabled={currentScreen === postedScreen}
+                onPress={() => switchScreens(postedScreen)}
+              >
+                Posted
+              </reactNativePaper.Button>
+              <reactNativePaper.Button
+                disabled={currentScreen === answeredScreen}
+                onPress={() => switchScreens(answeredScreen)}
+              >
+                Answered
+              </reactNativePaper.Button>
+            </View>
+            {questions &&
+              questions.map((item) => (
+                <Card
+                  key={item.questionId}
+                  style={cardStyles.card}
+                  onPress={() =>
+                    navigation.navigate('QuestionAnswer', { questionId: item.questionId })
+                  }
+                >
+                  <Card.Cover style={cardStyles.cardCover} source={{ uri: item.thumbnailUrl }} />
+                  <Card.Content style={cardStyles.cardContent}>
+                    <Title style={cardStyles.cardCaption} numberOfLines={1} ellipsizeMode="tail">
+                      {item.caption}
+                    </Title>
+                    <Paragraph style={cardStyles.cardPosted} numberOfLines={1} ellipsizeMode="tail">
+                      {item.postedBy}
+                    </Paragraph>
+                  </Card.Content>
+                </Card>
+              ))}
+          </>
+        )}
+      </View>
+    </ScrollView>
   );
 };
 
