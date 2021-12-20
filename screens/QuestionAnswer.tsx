@@ -36,7 +36,7 @@ export default function QuestionAnswer(props) {
   const [image, setImage] = useState<string | null>(null);
   const [caption, setCaption] = useState<string>('');
   const [hashtags, setHashtags] = useState<string>('');
-  const [users, setUsers] = useState<string>('');
+  const [postedBy, setPostedBy] = useState<string>('');
   const [location, setLocation] = useState<string>('');
   const [audio, setAudio] = useState<string | null>(null);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -51,7 +51,7 @@ export default function QuestionAnswer(props) {
         setImage(response.Thumbnail);
         setCaption(response.caption);
         setHashtags(response.hashtags);
-        setUsers(response.taggedUsers);
+        setPostedBy(response.postedBy);
         setAudio(response.audio);
       });
       getAnswer(props.route.params.questionId).then((response) => {
@@ -111,7 +111,7 @@ export default function QuestionAnswer(props) {
             <View style={styles.captionContainer}>
               <Text style={styles.textHeading}>{caption}</Text>
               <Text style={styles.textSubHeading}>{hashtags}</Text>
-              <Text style={styles.textSubHeading}>{users}</Text>
+              <Text style={styles.textSubHeading}>{postedBy}</Text>
             </View>
           </View>
           {loggedInUser ? (
@@ -148,7 +148,7 @@ export default function QuestionAnswer(props) {
                         disabled={isLoading}
                       >
                         <View style={styles.circularIcon}>
-                          <AntDesign name="message1" size={48} color="black" />
+                          <AntDesign name="message1" size={24} color="black" />
                         </View>
                       </TouchableHighlight>
                     ) : (
