@@ -89,13 +89,13 @@ const MyComponent = ({ navigation }) => {
     }
     apitesting();
   }, []);
-  const pendingScreen = 'Home',
-    acceptedScreen = 'ForYou';
+  const HomeScreen = 'Home',
+    ForYouScreenn = 'ForYou';
   const switchScreens = () => {
-    if (currentScreen == pendingScreen) {
-      setCurrentScreen(acceptedScreen);
+    if (currentScreen == HomeScreen) {
+      setCurrentScreen(ForYouScreenn);
     } else {
-      setCurrentScreen(pendingScreen);
+      setCurrentScreen(HomeScreen);
     }
   };
 
@@ -110,14 +110,11 @@ const MyComponent = ({ navigation }) => {
       <>
         {loggedInUser ? (
           <View style={styles.buttonsContainer}>
-            <reactNativePaper.Button
-              disabled={currentScreen == pendingScreen}
-              onPress={switchScreens}
-            >
+            <reactNativePaper.Button disabled={currentScreen == HomeScreen} onPress={switchScreens}>
               Home
             </reactNativePaper.Button>
             <reactNativePaper.Button
-              disabled={currentScreen === acceptedScreen}
+              disabled={currentScreen === ForYouScreenn}
               onPress={switchScreens}
             >
               For You
