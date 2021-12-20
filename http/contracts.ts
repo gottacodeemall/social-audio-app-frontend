@@ -14,7 +14,7 @@ export interface Question {
   questionId: string;
   caption: string;
   postedBy: string;
-  thumbnailUrl: string;
+  Thumbnail: string;
   hashtags: string;
   categories: string;
   taggedUsers: string;

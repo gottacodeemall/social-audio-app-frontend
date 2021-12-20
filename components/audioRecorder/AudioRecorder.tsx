@@ -10,6 +10,7 @@ import { Button } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { audioUpdateRecordingURI, updateState } from '../../redux/actions';
+import { spotifyDark, spotifyGreen, textColor } from '../../constants/Colors';
 
 const { width: DEVICE_WIDTH, height: DEVICE_HEIGHT } = Dimensions.get('window');
 const BACKGROUND_COLOR = '#EEEEEE';
@@ -346,11 +347,13 @@ export default function AudioRecorder(props) {
                   onPress={_onRecordPressed}
                   disabled={isLoading}
                 >
-                  {!isRecording ? (
-                    <Feather name="mic" size={100} color={greyColor} />
-                  ) : (
-                    <FontAwesome name="stop" size={50} color={greyColor} />
-                  )}
+                  <View style={styles.circularIcon}>
+                    {!isRecording ? (
+                      <Feather name="mic" size={80} color={spotifyDark} />
+                    ) : (
+                      <FontAwesome name="stop" size={50} color={spotifyDark} />
+                    )}
+                  </View>
                 </TouchableHighlight>
                 <View style={styles.recordingDataContainer}>
                   <View />
@@ -456,6 +459,14 @@ export default function AudioRecorder(props) {
 }
 
 const styles = StyleSheet.create({
+  circularIcon: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 100,
+    height: 100,
+    borderRadius: 100,
+    backgroundColor: spotifyGreen,
+  },
   emptyContainer: {
     alignSelf: 'stretch',
     backgroundColor: BACKGROUND_COLOR,

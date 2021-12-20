@@ -1,8 +1,17 @@
 import * as React from 'react';
-import { Avatar, Button, Card, Title, Paragraph, Searchbar } from 'react-native-paper';
+import {
+  Avatar,
+  Button,
+  Card,
+  Title,
+  Paragraph,
+  Searchbar,
+  ActivityIndicator,
+} from 'react-native-paper';
 import { Text, View } from '../components/Themed';
 import { ScrollView, StyleSheet } from 'react-native';
 import { fetchQuestions } from '../http/api';
+import { spotifyDark, spotifyGreen, textColor } from '../constants/Colors';
 import * as reactNativePaper from 'react-native-paper';
 import { Item } from 'react-native-paper/lib/typescript/components/List/List';
 import { white } from 'react-native-paper/lib/typescript/styles/colors';
@@ -21,44 +30,41 @@ const cardStyles = StyleSheet.create({
   },
   card: {
     width: 200,
-    height: 200,
+    height: 225,
     margin: 10,
     padding: 0,
-    overflow: 'scroll',
+    overflow: 'hidden',
     borderWidth: 2,
+    borderRadius: 15,
+    backgroundColor: '#333333',
+    alignSelf: 'center',
   },
   cardCover: {
     padding: 0,
     margin: 0,
-    width: '100%',
-    height: '100%',
+    width: 200,
+    height: 150,
     borderWidth: 1,
+    alignSelf: 'center',
+  },
+  cardContent: {
+    height: 50,
   },
   cardCaption: {
-    fontSize: 10,
+    fontSize: 14,
     fontWeight: '500',
     padding: 0,
+    color: textColor,
   },
   cardPosted: {
     fontSize: 10,
     padding: 0,
+    color: textColor,
   },
 });
 
-const styles = StyleSheet.create({
-  buttonsContainer: {
-    flexDirection: 'row',
-    borderRadius: 20,
-    marginTop: 20,
-    marginBottom: 20,
-    height: 40,
-    alignSelf: 'center',
-  },
-});
 const MyComponent = ({ navigation }) => {
-  const [searchQuery, setSearchQuery] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(false);
-  const onChangeSearch = (query: React.SetStateAction<string>) => setSearchQuery(query);
   const [currentScreen, setCurrentScreen] = React.useState<string>('Home');
   const [response, setResponse] = React.useState<HomePageCategoryQuestions[]>([]);
   const [items_category, setItems] = React.useState([]);
@@ -99,183 +105,181 @@ const MyComponent = ({ navigation }) => {
     }
   };
 
+  const styles = StyleSheet.create({
+    loaderContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      backgroundColor: spotifyDark,
+    },
+    textHeading: {
+      marginTop: 10,
+      marginLeft: 15,
+      fontWeight: 'bold',
+      color: textColor,
+      textAlign: 'left',
+      fontSize: 20,
+    },
+    buttonsContainer: {
+      flexDirection: 'row',
+      borderRadius: 20,
+      marginTop: 20,
+      marginBottom: 20,
+      height: 40,
+      alignSelf: 'center',
+    },
+  });
+
   return (
-    <ScrollView style={{ backgroundColor: 'white', height: '100%' }}>
-      <Searchbar
-        placeholder="Search"
-        onChangeText={onChangeSearch}
-        value={searchQuery}
-        autoComplete={true}
-      />
-      <>
-        {loggedInUser ? (
-          <View style={styles.buttonsContainer}>
-            <reactNativePaper.Button disabled={currentScreen == HomeScreen} onPress={switchScreens}>
-              Home
-            </reactNativePaper.Button>
-            <reactNativePaper.Button
-              disabled={currentScreen === ForYouScreenn}
-              onPress={switchScreens}
-            >
-              For You
-            </reactNativePaper.Button>
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      <View style={{ height: '100%' }} lightColor={spotifyDark}>
+        {isLoading ? (
+          <View style={[styles.loaderContainer]}>
+            <ActivityIndicator animating={true} color={spotifyGreen} />
           </View>
         ) : (
-          <></>
+          <>
+            {loggedInUser ? (
+              <View style={styles.buttonsContainer}>
+                <Button disabled={currentScreen == HomeScreen} onPress={switchScreens}>
+                  Home
+                </Button>
+                <Button disabled={currentScreen === ForYouScreenn} onPress={switchScreens}>
+                  For You
+                </Button>
+              </View>
+            ) : (
+              <></>
+            )}
+            {currentScreen == 'Home' ? (
+              <>
+                <Text style={styles.textHeading}>Trending</Text>
+                <ScrollView horizontal={true}>
+                  {trending.map((item) => (
+                    <Card
+                      key={item.questionId}
+                      style={cardStyles.card}
+                      onPress={() =>
+                        navigation.navigate('QuestionAnswer', { questionId: item.questionId })
+                      }
+                    >
+                      <Card.Cover style={cardStyles.cardCover} source={{ uri: item.Thumbnail }} />
+                      <Card.Content style={cardStyles.cardContent}>
+                        <Title
+                          style={cardStyles.cardCaption}
+                          numberOfLines={1}
+                          ellipsizeMode="tail"
+                        >
+                          {item.caption}
+                        </Title>
+                        <Paragraph
+                          style={cardStyles.cardPosted}
+                          numberOfLines={1}
+                          ellipsizeMode="tail"
+                        >
+                          {item.postedBy}
+                        </Paragraph>
+                      </Card.Content>
+                    </Card>
+                  ))}
+                </ScrollView>
+
+                <Text style={styles.textHeading}>Latest</Text>
+                <ScrollView horizontal={true}>
+                  {latest.map((item) => (
+                    <Card
+                      key={item.questionId}
+                      style={cardStyles.card}
+                      onPress={() =>
+                        navigation.navigate('QuestionAnswer', { questionId: item.questionId })
+                      }
+                    >
+                      <Card.Cover style={cardStyles.cardCover} source={{ uri: item.Thumbnail }} />
+                      <Card.Content style={cardStyles.cardContent}>
+                        <Title
+                          style={cardStyles.cardCaption}
+                          numberOfLines={1}
+                          ellipsizeMode="tail"
+                        >
+                          {item.caption}
+                        </Title>
+                        <Paragraph
+                          style={cardStyles.cardPosted}
+                          numberOfLines={1}
+                          ellipsizeMode="tail"
+                        >
+                          {item.postedBy}
+                        </Paragraph>
+                      </Card.Content>
+                    </Card>
+                  ))}
+                </ScrollView>
+
+                <Text style={styles.textHeading}>Location</Text>
+                <ScrollView horizontal={true}>
+                  {location.map((item) => (
+                    <Card
+                      key={item.questionId}
+                      style={cardStyles.card}
+                      onPress={() =>
+                        navigation.navigate('QuestionAnswer', { questionId: item.questionId })
+                      }
+                    >
+                      <Card.Cover style={cardStyles.cardCover} source={{ uri: item.Thumbnail }} />
+                      <Card.Content style={cardStyles.cardContent}>
+                        <Title
+                          style={cardStyles.cardCaption}
+                          numberOfLines={1}
+                          ellipsizeMode="tail"
+                        >
+                          {item.caption}
+                        </Title>
+                        <Paragraph
+                          style={cardStyles.cardPosted}
+                          numberOfLines={1}
+                          ellipsizeMode="tail"
+                        >
+                          {item.postedBy}
+                        </Paragraph>
+                      </Card.Content>
+                    </Card>
+                  ))}
+                </ScrollView>
+              </>
+            ) : (
+              <>
+                {foryou &&
+                  foryou.map((item) => (
+                    <Card
+                      key={item.questionId}
+                      style={cardStyles.card}
+                      onPress={() =>
+                        navigation.navigate('QuestionAnswer', { questionId: item.questionId })
+                      }
+                    >
+                      <Card.Cover style={cardStyles.cardCover} source={{ uri: item.Thumbnail }} />
+                      <Card.Content style={cardStyles.cardContent}>
+                        <Title
+                          style={cardStyles.cardCaption}
+                          numberOfLines={1}
+                          ellipsizeMode="tail"
+                        >
+                          {item.caption}
+                        </Title>
+                        <Paragraph
+                          style={cardStyles.cardPosted}
+                          numberOfLines={1}
+                          ellipsizeMode="tail"
+                        >
+                          {item.postedBy}
+                        </Paragraph>
+                      </Card.Content>
+                    </Card>
+                  ))}
+              </>
+            )}
+          </>
         )}
-      </>
-      {isLoading ? (
-        <Text>'Is Loading'</Text>
-      ) : (
-        <>
-          {currentScreen == 'Home' ? (
-            <>
-              <Text
-                style={{
-                  marginTop: 10,
-                  fontWeight: 'bold',
-                  color: 'black',
-                  textAlign: 'center',
-                  fontSize: 20,
-                }}
-              >
-                Trending
-              </Text>
-              <ScrollView horizontal={true}>
-                {trending.map((item) => (
-                  <Card
-                    key={item.questionId}
-                    style={cardStyles.card}
-                    onPress={() =>
-                      navigation.navigate('QuestionAnswer', { questionId: item.questionId })
-                    }
-                  >
-                    <Card.Content>
-                      <Title style={cardStyles.cardCaption}>{item.caption}</Title>
-                      <Paragraph style={cardStyles.cardPosted}>{item.postedBy}</Paragraph>
-                    </Card.Content>
-                    <Card.Cover style={cardStyles.cardCover} source={{ uri: item.thumbnailUrl }} />
-                  </Card>
-                ))}
-              </ScrollView>
-
-              <Text
-                style={{
-                  marginTop: 10,
-                  fontWeight: 'bold',
-                  color: 'black',
-                  textAlign: 'center',
-                  fontSize: 20,
-                }}
-              >
-                Latest
-              </Text>
-              <ScrollView horizontal={true}>
-                {latest.map((item) => (
-                  <Card
-                    key={item.questionId}
-                    style={cardStyles.card}
-                    onPress={() =>
-                      navigation.navigate('QuestionAnswer', { questionId: item.questionId })
-                    }
-                  >
-                    <Card.Content>
-                      <Title style={cardStyles.cardCaption}>{item.caption}</Title>
-                      <Paragraph style={cardStyles.cardPosted}>{item.postedBy}</Paragraph>
-                    </Card.Content>
-                    <Card.Cover style={cardStyles.cardCover} source={{ uri: item.thumbnailUrl }} />
-                  </Card>
-                ))}
-              </ScrollView>
-
-              <Text
-                style={{
-                  marginTop: 10,
-                  fontWeight: 'bold',
-                  color: 'black',
-                  textAlign: 'center',
-                  fontSize: 20,
-                }}
-              >
-                Location
-              </Text>
-              <ScrollView horizontal={true}>
-                {location.map((item) => (
-                  <Card
-                    key={item.questionId}
-                    style={cardStyles.card}
-                    onPress={() =>
-                      navigation.navigate('QuestionAnswer', { questionId: item.questionId })
-                    }
-                  >
-                    <Card.Content>
-                      <Title style={cardStyles.cardCaption}>{item.caption}</Title>
-                      <Paragraph style={cardStyles.cardPosted}>{item.postedBy}</Paragraph>
-                    </Card.Content>
-                    <Card.Cover style={cardStyles.cardCover} source={{ uri: item.thumbnailUrl }} />
-                  </Card>
-                ))}
-              </ScrollView>
-            </>
-          ) : (
-            <>
-              <ScrollView horizontal={true}>
-                {foryou.map((item) => (
-                  <Card
-                    key={item.questionId}
-                    style={cardStyles.card}
-                    onPress={() =>
-                      navigation.navigate('QuestionAnswer', { questionId: item.questionId })
-                    }
-                  >
-                    <Card.Content>
-                      <Title style={cardStyles.cardCaption}>{item.caption}</Title>
-                      <Paragraph style={cardStyles.cardPosted}>{item.postedBy}</Paragraph>
-                    </Card.Content>
-                    <Card.Cover style={cardStyles.cardCover} source={{ uri: item.thumbnailUrl }} />
-                  </Card>
-                ))}
-              </ScrollView>
-
-              <ScrollView horizontal={true}>
-                {foryou.map((item) => (
-                  <Card
-                    key={item.questionId}
-                    style={cardStyles.card}
-                    onPress={() =>
-                      navigation.navigate('QuestionAnswer', { questionId: item.questionId })
-                    }
-                  >
-                    <Card.Content>
-                      <Title style={cardStyles.cardCaption}>{item.caption}</Title>
-                      <Paragraph style={cardStyles.cardPosted}>{item.postedBy}</Paragraph>
-                    </Card.Content>
-                    <Card.Cover style={cardStyles.cardCover} source={{ uri: item.thumbnailUrl }} />
-                  </Card>
-                ))}
-              </ScrollView>
-
-              <ScrollView horizontal={true}>
-                {foryou.map((item) => (
-                  <Card
-                    key={item.questionId}
-                    style={cardStyles.card}
-                    onPress={() =>
-                      navigation.navigate('QuestionAnswer', { questionId: item.questionId })
-                    }
-                  >
-                    <Card.Content>
-                      <Title style={cardStyles.cardCaption}>{item.caption}</Title>
-                      <Paragraph style={cardStyles.cardPosted}>{item.postedBy}</Paragraph>
-                    </Card.Content>
-                    <Card.Cover style={cardStyles.cardCover} source={{ uri: item.thumbnailUrl }} />
-                  </Card>
-                ))}
-              </ScrollView>
-            </>
-          )}
-        </>
-      )}
+      </View>
     </ScrollView>
   );
 };

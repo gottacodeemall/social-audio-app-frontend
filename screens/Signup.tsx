@@ -16,6 +16,7 @@ import { login, signup } from '../http/api';
 import { http } from '../http/http';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { spotifyDark, spotifyGreen } from '../constants/Colors';
 
 export default function Signup({ navigation }) {
   const [email, setEmail] = useState('');
@@ -41,80 +42,82 @@ export default function Signup({ navigation }) {
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scrollView}>
-        <View style={styles.inputView}>
-          <TextInput
-            style={styles.TextInput}
-            placeholder="Email"
-            onChangeText={(email) => setEmail(email)}
-          />
+        <View style={styles.fieldContainer}>
+          <View style={styles.inputView}>
+            <TextInput
+              style={styles.TextInput}
+              placeholder="Email"
+              onChangeText={(email) => setEmail(email)}
+            />
+          </View>
+          <View style={styles.inputView}>
+            <TextInput
+              style={styles.TextInput}
+              placeholder="Password"
+              secureTextEntry={true}
+              onChangeText={(password) => setPassword(password)}
+            />
+          </View>
+          <View style={styles.inputView}>
+            <TextInput
+              style={styles.TextInput}
+              placeholder="First Name"
+              onChangeText={(firstName) => setFirstName(firstName)}
+            />
+          </View>
+          <View style={styles.inputView}>
+            <TextInput
+              style={styles.TextInput}
+              placeholder="Last Name"
+              onChangeText={(lastName) => setLastName(lastName)}
+            />
+          </View>
+          <View style={styles.inputView}>
+            <TextInput
+              style={styles.TextInput}
+              placeholder="Age"
+              onChangeText={(age) => setAge(age)}
+            />
+          </View>
+          <View style={styles.inputView}>
+            <TextInput
+              style={styles.TextInput}
+              placeholder="Gender"
+              onChangeText={(gender) => setGender(gender)}
+            />
+          </View>
+          <View style={styles.inputView}>
+            <TextInput
+              style={styles.TextInput}
+              placeholder="Ethnicity"
+              onChangeText={(ethnicity) => setEthnicity(ethnicity)}
+            />
+          </View>
+          <View style={styles.inputView}>
+            <TextInput
+              style={styles.TextInput}
+              placeholder="Intro"
+              onChangeText={(intro) => setIntro(intro)}
+            />
+          </View>
+          <View style={styles.inputView}>
+            <TextInput
+              style={styles.TextInput}
+              placeholder="Phone Number"
+              onChangeText={(phoneNumber) => setPhoneNumber(phoneNumber)}
+            />
+          </View>
+          <TouchableOpacity style={styles.loginBtn}>
+            <Pressable
+              onPress={() => CallSignUp()}
+              style={({ pressed }) => ({
+                opacity: pressed ? 0.5 : 1,
+              })}
+            >
+              <Text style={{ color: 'white' }}>Sign Up</Text>
+            </Pressable>
+          </TouchableOpacity>
         </View>
-        <View style={styles.inputView}>
-          <TextInput
-            style={styles.TextInput}
-            placeholder="Password"
-            secureTextEntry={true}
-            onChangeText={(password) => setPassword(password)}
-          />
-        </View>
-        <View style={styles.inputView}>
-          <TextInput
-            style={styles.TextInput}
-            placeholder="First Name"
-            onChangeText={(firstName) => setFirstName(firstName)}
-          />
-        </View>
-        <View style={styles.inputView}>
-          <TextInput
-            style={styles.TextInput}
-            placeholder="Last Name"
-            onChangeText={(lastName) => setLastName(lastName)}
-          />
-        </View>
-        <View style={styles.inputView}>
-          <TextInput
-            style={styles.TextInput}
-            placeholder="Age"
-            onChangeText={(age) => setAge(age)}
-          />
-        </View>
-        <View style={styles.inputView}>
-          <TextInput
-            style={styles.TextInput}
-            placeholder="Gender"
-            onChangeText={(gender) => setGender(gender)}
-          />
-        </View>
-        <View style={styles.inputView}>
-          <TextInput
-            style={styles.TextInput}
-            placeholder="Ethnicity"
-            onChangeText={(ethnicity) => setEthnicity(ethnicity)}
-          />
-        </View>
-        <View style={styles.inputView}>
-          <TextInput
-            style={styles.TextInput}
-            placeholder="Intro"
-            onChangeText={(intro) => setIntro(intro)}
-          />
-        </View>
-        <View style={styles.inputView}>
-          <TextInput
-            style={styles.TextInput}
-            placeholder="Phone Number"
-            onChangeText={(phoneNumber) => setPhoneNumber(phoneNumber)}
-          />
-        </View>
-        <TouchableOpacity style={styles.loginBtn}>
-          <Pressable
-            onPress={() => CallSignUp()}
-            style={({ pressed }) => ({
-              opacity: pressed ? 0.5 : 1,
-            })}
-          >
-            <Text style={{ color: 'white' }}>Sign Up</Text>
-          </Pressable>
-        </TouchableOpacity>
       </ScrollView>
     </View>
   );
@@ -125,10 +128,15 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: spotifyDark,
+  },
+  fieldContainer: {
+    paddingTop: 20,
+    alignItems: 'center',
+    backgroundColor: spotifyDark,
   },
   scrollView: {
     width: '100%',
-    marginLeft: '30%',
   },
   inputView: {
     borderColor: '#AEACAB',
@@ -137,6 +145,7 @@ const styles = StyleSheet.create({
     height: 45,
     marginBottom: 20,
     alignItems: 'center',
+    borderRadius: 10,
   },
   TextInput: {
     height: 50,
@@ -144,6 +153,8 @@ const styles = StyleSheet.create({
     padding: 10,
     marginLeft: 20,
     alignItems: 'center',
+    width: '100%',
+    color: spotifyDark,
   },
   loginBtn: {
     width: '70%',
@@ -151,7 +162,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 40,
-    backgroundColor: '#5D3EA8',
+    backgroundColor: spotifyGreen,
+    borderRadius: 10,
   },
   signup: {
     marginTop: 50,

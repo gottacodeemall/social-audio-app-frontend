@@ -36,6 +36,7 @@ import QuestionScreen from '../screens/QuestionScreen';
 import DiscussionScreen from '../screens/DiscussionScreen';
 import { useSelector } from 'react-redux';
 import MyQA from '../screens/MyQA';
+import Search from '../screens/Search';
 
 const styles = StyleSheet.create({
   container: {
@@ -79,22 +80,11 @@ export default function Navigation(
       linking={LinkingConfiguration}
       theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
     >
-      {/* const loggedInUser = useSelector(state => ) */}
       {loggedInUser != '' ? (
         <RootNavigator />
       ) : (
         <>
           <RootNavigator1 />
-          {/* <TouchableOpacity style={styles.loginBtn}>
-            <Pressable
-              onPress={() => navigation.navigate('Home')}
-              style={({ pressed }) => ({
-                opacity: pressed ? 0.5 : 1,
-              })}
-            >
-              <Text style={{ color: 'white' }}>Login</Text>
-            </Pressable>
-          </TouchableOpacity> */}
         </>
       )}
     </NavigationContainer>
@@ -120,6 +110,7 @@ function RootNavigator() {
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="QuestionAnswer" component={QuestionAnswer} />
       <Stack.Screen name="Record" component={AudioRecorder} />
+      <Stack.Screen name="Search" component={Search} />
     </Stack.Navigator>
   );
 }
@@ -133,6 +124,7 @@ function RootNavigator1() {
       <Stack1.Screen name="Home" component={Dashboard} />
       <Stack1.Screen name="Login" component={Login} />
       <Stack.Screen name="QuestionAnswer" component={QuestionAnswer} />
+      <Stack.Screen name="Search" component={Search} />
       <Stack.Screen name="Signup" component={Signup} />
     </Stack1.Navigator>
   );
@@ -156,6 +148,14 @@ function BottomTabNavigator1() {
         options={({ navigation }: RootTabScreenProps<'Home'>) => ({
           title: 'Home',
           tabBarIcon: ({ color }) => <AntDesign name="home" size={24} color={color} />,
+        })}
+      />
+      <BottomTab1.Screen
+        name="Search"
+        component={Search}
+        options={({ navigation }: RootTabScreenProps<'Search'>) => ({
+          title: 'Search',
+          tabBarIcon: ({ color }) => <AntDesign name="search1" size={24} color={color} />,
         })}
       />
 
@@ -193,6 +193,14 @@ function BottomTabNavigator() {
         options={({ navigation }: RootTabScreenProps<'Home'>) => ({
           title: 'Home',
           tabBarIcon: ({ color }) => <AntDesign name="home" size={24} color={color} />,
+        })}
+      />
+      <BottomTab.Screen
+        name="Search"
+        component={Search}
+        options={({ navigation }: RootTabScreenProps<'Search'>) => ({
+          title: 'Search',
+          tabBarIcon: ({ color }) => <AntDesign name="search1" size={24} color={color} />,
         })}
       />
       <BottomTab.Screen

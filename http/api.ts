@@ -83,6 +83,14 @@ export const getAnswer = async (questionId) => {
   return json;
 };
 
+export const getQuestionsForSearchQueryApi = async (query) => {
+  // change this
+  const queryUrl = '/dashboard/relevantquestionsforhomepage';
+  const response = await fetch(baseURL + queryUrl);
+  const json = await response.json();
+  return json;
+};
+
 export const saveQuestionApi = async (question: Question) => {
   if (question.Thumbnail && question.Thumbnail != '')
     question.Thumbnail = await uploadFileToS3(question.Thumbnail, typeOfFile.Image);
@@ -201,7 +209,6 @@ export const saveAnswerApi = async (answer: Answer) => {
 
 export const requestChat = async (answerId) => {
   const queryUrl = '/discussion/requestchat';
-  console.log('reached requestChatApi')
   try {
     return fetch(baseURL + queryUrl, {
       method: 'POST',
@@ -209,14 +216,14 @@ export const requestChat = async (answerId) => {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({answerId: answerId}),
+      body: JSON.stringify({ answerId: answerId }),
     });
   } catch (e) {
     console.log('error at requestChat api', e);
   }
 };
 
-export const getMyQuestions = async (email,status) => {
+export const getMyQuestions = async (email, status) => {
   const queryUrl = '/question?email=' + email + '&status=' + status;
   const response = await fetch(baseURL + queryUrl);
   const json = await response.json();
