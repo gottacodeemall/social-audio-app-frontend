@@ -3,6 +3,7 @@ import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
+import { overallColorScheme, statusBarColorScheme } from './constants/Colors';
 
 import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
@@ -21,8 +22,8 @@ export default function App() {
     return (
       <Provider store={store}>
         <SafeAreaProvider>
-          <Navigation colorScheme={colorScheme} />
-          <StatusBar />
+          <Navigation colorScheme={overallColorScheme} />
+          <StatusBar style={statusBarColorScheme} />
         </SafeAreaProvider>
       </Provider>
     );

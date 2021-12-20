@@ -14,8 +14,9 @@ import {
 } from '../http/api';
 import { Card, Paragraph, Title } from 'react-native-paper';
 import { FontAwesome } from '@expo/vector-icons';
+import { spotifyDark } from '../constants/Colors';
 const { width: DEVICE_WIDTH, height: DEVICE_HEIGHT } = Dimensions.get('window');
-const BACKGROUND_COLOR = '#EEEEEE';
+const BACKGROUND_COLOR = spotifyDark;
 
 const pendingScreen = 'pending',
   acceptedScreen = 'accepted';
@@ -110,7 +111,6 @@ export default function DiscussionScreen() {
                 </View>
                 <View style={styles.cardRight}>
                   <Paragraph style={styles.paragraph}>{item.meeting_info}</Paragraph>
-                  <Paragraph style={styles.paragraph}>{item.posted_by}</Paragraph>
                 </View>
               </View>
             ))}
@@ -153,6 +153,7 @@ const styles = StyleSheet.create({
     width: DEVICE_WIDTH - 30,
     height: 150,
     marginBottom: 20,
+    borderRadius: 10,
   },
   cardLeft: {
     flex: 1,

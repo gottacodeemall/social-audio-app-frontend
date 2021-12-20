@@ -1,7 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
 import * as React from 'react';
 import { useState } from 'react';
-import { Platform, StyleSheet, TextInput, TouchableOpacity, Pressable } from 'react-native';
+import {
+  Platform,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  Pressable,
+  ActivityIndicator,
+} from 'react-native';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
@@ -13,6 +20,7 @@ import Signup from './Signup';
 import { ApiResponse } from '../http/contracts';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateIsUserLoggedIn, updateState } from '../redux/actions';
+import { spotifyDark, spotifyGreen, textColor } from '../constants/Colors';
 
 const Stack = createNativeStackNavigator();
 
@@ -22,8 +30,12 @@ function Login({ navigation }) {
   const [password, setPassword] = useState('');
   const [response, setResponse] = useState([]);
   const [success, setSucess] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const CallLogin = async () => {
+    setIsLoading(true);
     login(email, password).then((response) => {
+      setIsLoading(false);
       setResponse(response);
       setSucess(response.success);
       if (response.success) {
@@ -50,27 +62,34 @@ function Login({ navigation }) {
           onChangeText={(password) => setPassword(password)}
         />
       </View>
-      <View>{success ? <Text></Text> : <Text>Invalid Email/Password</Text>}</View>
-      <TouchableOpacity style={styles.loginBtn}>
-        <Pressable
-          onPress={(response) => CallLogin()}
-          style={({ pressed }) => ({
-            opacity: pressed ? 0.5 : 1,
-          })}
-        >
-          <Text style={{ color: 'white' }}>Login</Text>
-        </Pressable>
-      </TouchableOpacity>
+      <View>
+        {success ? <Text></Text> : <Text style={styles.textColor}>Invalid Email/Password</Text>}
+      </View>
+      {isLoading ? (
+        <ActivityIndicator animating={true} color={spotifyGreen} />
+      ) : (
+        <TouchableOpacity style={styles.loginBtn}>
+          <Pressable
+            onPress={(response) => CallLogin()}
+            style={({ pressed }) => ({
+              opacity: pressed ? 0.5 : 1,
+            })}
+          >
+            <Text style={styles.loginTextInput}>Login</Text>
+          </Pressable>
+        </TouchableOpacity>
+      )}
+
       <View style={styles.signup}>
         <Text>
-          <Text>Don't have an account? </Text>
+          <Text style={styles.textColor}>Don't have an account? </Text>
           <Pressable
             onPress={() => navigation.navigate('Signup')}
             style={({ pressed }) => ({
               opacity: pressed ? 0.5 : 1,
             })}
           >
-            <Text style={{ color: '#5D3EA8' }}>Sign Up</Text>
+            <Text style={{ color: spotifyGreen }}>Sign Up</Text>
           </Pressable>
         </Text>
       </View>
@@ -83,6 +102,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: spotifyDark,
   },
   inputView: {
     borderColor: '#AEACAB',
@@ -91,13 +111,17 @@ const styles = StyleSheet.create({
     height: 45,
     marginBottom: 20,
     alignItems: 'center',
+    borderRadius: 10,
   },
   TextInput: {
     height: 50,
     flex: 1,
     padding: 10,
-    marginLeft: 20,
+    marginLeft: 5,
     alignItems: 'center',
+    borderRadius: 10,
+    width: '100%',
+    color: spotifyDark,
   },
   loginBtn: {
     width: '70%',
@@ -105,10 +129,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 40,
-    backgroundColor: '#5D3EA8',
+    backgroundColor: spotifyGreen,
+    borderRadius: 10,
   },
   signup: {
     marginTop: 50,
+    backgroundColor: spotifyDark,
+    color: textColor,
+  },
+  textColor: {
+    color: textColor,
+    backgroundColor: spotifyDark,
+  },
+  loginTextInput: {
+    color: textColor,
+    width: '100%',
   },
 });
 

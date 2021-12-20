@@ -78,22 +78,11 @@ export default function Navigation(
       linking={LinkingConfiguration}
       theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
     >
-      {/* const loggedInUser = useSelector(state => ) */}
       {loggedInUser != '' ? (
         <RootNavigator />
       ) : (
         <>
           <RootNavigator1 />
-          {/* <TouchableOpacity style={styles.loginBtn}>
-            <Pressable
-              onPress={() => navigation.navigate('Home')}
-              style={({ pressed }) => ({
-                opacity: pressed ? 0.5 : 1,
-              })}
-            >
-              <Text style={{ color: 'white' }}>Login</Text>
-            </Pressable>
-          </TouchableOpacity> */}
         </>
       )}
     </NavigationContainer>
