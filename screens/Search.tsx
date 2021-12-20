@@ -111,7 +111,7 @@ const Search = ({ navigation }) => {
                       navigation.navigate('QuestionAnswer', { questionId: item.questionId })
                     }
                   >
-                    <Card.Cover style={cardStyles.cardCover} source={{ uri: item.thumbnailUrl }} />
+                    <Card.Cover style={cardStyles.cardCover} source={{ uri: item.Thumbnail }} />
                     <Card.Content style={cardStyles.cardContent}>
                       <Title style={cardStyles.cardCaption} numberOfLines={1} ellipsizeMode="tail">
                         {item.caption}
