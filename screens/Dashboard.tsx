@@ -17,6 +17,7 @@ import { Item } from 'react-native-paper/lib/typescript/components/List/List';
 import { white } from 'react-native-paper/lib/typescript/styles/colors';
 import { HomePageCategoryQuestions, Question } from '../http/contracts';
 import { useSelector } from 'react-redux';
+import { useIsFocused } from '@react-navigation/native';
 // import { Searchbar } from 'react-native-paper';
 // const LeftContent = props => <Avatar.Icon {...props} icon="folder" />
 const cardStyles = StyleSheet.create({
@@ -64,6 +65,7 @@ const cardStyles = StyleSheet.create({
 });
 
 const MyComponent = ({ navigation }) => {
+  const isFocused = useIsFocused();
   const [isLoading, setIsLoading] = React.useState(false);
   const [currentScreen, setCurrentScreen] = React.useState<string>('Home');
   const [response, setResponse] = React.useState<HomePageCategoryQuestions[]>([]);
@@ -93,8 +95,11 @@ const MyComponent = ({ navigation }) => {
         });
       });
     }
-    apitesting();
-  }, []);
+    if (isFocused) {
+      apitesting();
+    }
+  }, [isFocused]);
+
   const HomeScreen = 'Home',
     ForYouScreenn = 'ForYou';
   const switchScreens = () => {

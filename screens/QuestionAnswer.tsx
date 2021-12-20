@@ -59,7 +59,7 @@ export default function QuestionAnswer(props) {
         setAnswers(response);
       });
     };
-    fetchQuestion();
+    if (isFocused) fetchQuestion();
   }, [isFocused]);
 
   const generateAnswer = (): Answer => {
@@ -114,44 +114,49 @@ export default function QuestionAnswer(props) {
               <Text style={styles.textSubHeading}>{users}</Text>
             </View>
           </View>
-          <View style={styles.answerThisQuestionContainer}>
-            <Text style={styles.textHeading}>Answer this question: </Text>
-            <Pressable
-              onPress={() => record()}
-              style={({ pressed }) => ({
-                opacity: pressed ? 0.5 : 1,
-              })}
-            >
-              <FontAwesome name="microphone" size={24} color="#5D3EA8" />
-            </Pressable>
-          </View>
+          {loggedInUser ? (
+            <View style={styles.answerThisQuestionContainer}>
+              <Text style={styles.textHeading}>Answer this question: </Text>
+              <Pressable
+                onPress={() => record()}
+                style={({ pressed }) => ({
+                  opacity: pressed ? 0.5 : 1,
+                })}
+              >
+                <FontAwesome name="microphone" size={24} color="#5D3EA8" />
+              </Pressable>
+            </View>
+          ) : (
+            <></>
+          )}
           <View style={styles.answersContainer}>
             <Text style={styles.textHeading}>Answers:</Text>
-            {answers.map((item) => (
-              <View style={styles.answerContainer}>
-                <AudioPlayer
-                  recordedUri={item.audio ?? ''}
-                  isSliderEnabled={true}
-                  isTimerEnabled={true}
-                />
-                <View style={styles.answerBottomContainer}>
-                  <Text>Answered By: {item.answeredBy ? item.answeredBy : 'Error'}</Text>
-                  {loggedInUser ? (
-                    <TouchableHighlight
-                      underlayColor={BACKGROUND_COLOR}
-                      onPress={(response) => RequestChat(item.answerId)}
-                      disabled={isLoading}
-                    >
-                      <View style={styles.circularIcon}>
-                        <AntDesign name="message1" size={24} color="black" />
-                      </View>
-                    </TouchableHighlight>
-                  ) : (
-                    <></>
-                  )}
+            {answers &&
+              answers.map((item) => (
+                <View style={styles.answerContainer}>
+                  <AudioPlayer
+                    recordedUri={item.audio ?? ''}
+                    isSliderEnabled={true}
+                    isTimerEnabled={true}
+                  />
+                  <View style={styles.answerBottomContainer}>
+                    <Text>Answered By: {item.answeredBy ? item.answeredBy : 'Error'}</Text>
+                    {loggedInUser ? (
+                      <TouchableHighlight
+                        underlayColor={BACKGROUND_COLOR}
+                        onPress={(response) => RequestChat(item.answerId)}
+                        disabled={isLoading}
+                      >
+                        <View style={styles.circularIcon}>
+                          <AntDesign name="message1" size={48} color="black" />
+                        </View>
+                      </TouchableHighlight>
+                    ) : (
+                      <></>
+                    )}
+                  </View>
                 </View>
-              </View>
-            ))}
+              ))}
           </View>
         </View>
       )}

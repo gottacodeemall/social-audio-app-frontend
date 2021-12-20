@@ -15,6 +15,7 @@ import {
 import { Card, Paragraph, Title } from 'react-native-paper';
 import { FontAwesome } from '@expo/vector-icons';
 import { spotifyDark } from '../constants/Colors';
+import { useIsFocused } from '@react-navigation/native';
 const { width: DEVICE_WIDTH, height: DEVICE_HEIGHT } = Dimensions.get('window');
 const BACKGROUND_COLOR = spotifyDark;
 
@@ -22,6 +23,7 @@ const pendingScreen = 'pending',
   acceptedScreen = 'accepted';
 
 export default function DiscussionScreen() {
+  const isFocused = useIsFocused();
   const [rerender, forcererender] = useState<number>(0);
   const loggedInUser = useSelector((state) => state.generic.loggedInUser);
   const [currentScreen, setCurrentScreen] = useState<string>('pending');
@@ -44,7 +46,7 @@ export default function DiscussionScreen() {
     };
 
     apiCalls();
-  }, [currentScreen, rerender]);
+  }, [currentScreen, rerender, isFocused]);
 
   const switchScreens = () => {
     if (currentScreen == pendingScreen) {
