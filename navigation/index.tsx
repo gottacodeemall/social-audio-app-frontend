@@ -35,6 +35,7 @@ const val = 0;
 import QuestionScreen from '../screens/QuestionScreen';
 import DiscussionScreen from '../screens/DiscussionScreen';
 import { useSelector } from 'react-redux';
+import MyQA from '../screens/MyQA';
 
 const styles = StyleSheet.create({
   container: {
@@ -185,7 +186,7 @@ function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="QA"
-        component={TabTwoScreen}
+        component={MyQA}
         options={{
           title: 'Q/A',
           tabBarIcon: ({ color }) => <AntDesign name="question" size={24} color={color} />,
