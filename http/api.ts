@@ -13,6 +13,7 @@ import { http } from './http';
 import { RNS3, File, Options } from 'react-native-aws3';
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
+import { useSelector } from 'react-redux';
 
 const baseURL = 'https://74pataqajg.execute-api.us-east-1.amazonaws.com/test';
 
@@ -66,6 +67,16 @@ export const fetchQuestions = async () => {
   const queryUrl = '/dashboard/relevantquestionsforhomepage';
   const response = await fetch(baseURL + queryUrl);
   const json = await response.json();
+  //console.log(queryUrl);
+  return json;
+};
+
+export const fetchQuestionsForYou = async (loggedIn) => {
+  //const loggedInUser = useSelector((state) => state.generic.loggedInUser);
+  const queryUrl = '/dashboard/relevantquestionsforuser?email=' + loggedIn;
+  console.log(queryUrl);
+  const response = await fetch(baseURL + queryUrl);
+  const json = await response.json();
   return json;
 };
 
@@ -85,7 +96,7 @@ export const getAnswer = async (questionId) => {
 
 export const getQuestionsForSearchQueryApi = async (query) => {
   // change this
-  const queryUrl = '/dashboard/relevantquestionsforhomepage';
+  const queryUrl = '/searchquery?query=' + query;
   const response = await fetch(baseURL + queryUrl);
   const json = await response.json();
   return json;

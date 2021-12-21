@@ -81,6 +81,7 @@ const Search = ({ navigation }) => {
     } else {
       const response = await getQuestionsForSearchQueryApi(query);
       setQuestions(response);
+      console.log(response);
     }
 
     setIsLoading(false);
