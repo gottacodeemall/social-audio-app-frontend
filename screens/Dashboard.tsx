@@ -10,7 +10,7 @@ import {
 } from 'react-native-paper';
 import { Text, View } from '../components/Themed';
 import { ScrollView, StyleSheet } from 'react-native';
-import { fetchQuestions } from '../http/api';
+import { fetchQuestions, fetchQuestionsForYou } from '../http/api';
 import { spotifyDark, spotifyGreen, textColor } from '../constants/Colors';
 import * as reactNativePaper from 'react-native-paper';
 import { Item } from 'react-native-paper/lib/typescript/components/List/List';
@@ -90,7 +90,6 @@ const MyComponent = ({ navigation }) => {
             setLatest(category.questions);
           } else if (category.homePageCategory == 'Location') {
             setLocation(category.questions);
-            setforyou(category.questions);
           }
         });
       });
@@ -99,6 +98,30 @@ const MyComponent = ({ navigation }) => {
       apitesting();
     }
   }, [isFocused]);
+
+  if (loggedInUser) {
+    //console.log('hello');
+    React.useEffect(() => {
+      async function apitesting1() {
+        setIsLoading(true);
+        //console.log('intest');
+        fetchQuestionsForYou(loggedInUser).then((response: HomePageCategoryQuestions[]) => {
+          setIsLoading(false);
+          setResponse(response);
+          //console.log('hello');
+          console.log(response);
+          response.forEach((category) => {
+            if (category.homePageCategory == 'ForYou') {
+              setforyou(category.questions);
+            }
+          });
+        });
+      }
+      if (isFocused) {
+        apitesting1();
+      }
+    }, [isFocused]);
+  }
 
   const HomeScreen = 'Home',
     ForYouScreenn = 'ForYou';
